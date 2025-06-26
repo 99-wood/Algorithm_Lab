@@ -1,0 +1,12 @@
+{
+  "C": [
+    [-1,-1]
+  ],
+  "L": "11cfd52ee4313c86fff1cc50c3403c891c94cdd2427fc985ab1cd380654cbfe1",
+  "password": "732",
+  "results": {
+    "method1": {"tries": 21, "password": [7, 3, 2]},
+    "method2": {"tries": 19, "password": [7, 3, 2]},
+    "method3": {"tries": 14, "password": [7, 3, 2]}
+  }
+}

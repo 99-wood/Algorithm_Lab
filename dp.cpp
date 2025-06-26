@@ -41,8 +41,7 @@ namespace dp{
                 must[x][y] = true;
                 return;
             }
-            if(maze[x][y].nodeType == maze::NodeType::G) f[x][y] += maze[x][y].value;
-            if(maze[x][y].nodeType == maze::NodeType::T) f[x][y] += maze[x][y].value;
+            f[x][y] += maze[x][y].value;
             for(const auto [dx, dy] : direction){
                 const int u = x + dx, v = y + dy;
                 if(enable(u, v) && !(u == lastx && v == lasty)){

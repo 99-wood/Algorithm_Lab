@@ -1,0 +1,14 @@
+{
+  "C": [
+    [3,-1,-1],
+    [3,1],
+    [2,0]
+  ],
+  "L": "38b5eddb98061eb811e4660c492769a7641d77163748915f19b56da70b2bb4cd",
+  "password": "365",
+  "results": {
+    "method1": {"tries": 18, "password": [3, 6, 5]},
+    "method2": {"tries": 16, "password": [3, 6, 5]},
+    "method3": {"tries": 12, "password": [3, 6, 5]}
+  }
+}

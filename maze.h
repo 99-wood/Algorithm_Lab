@@ -17,6 +17,7 @@
 namespace maze{
     constexpr int GVAL = 5;
     constexpr int TVAL = -3;
+    constexpr int BVAL = 10;
     using std::vector;
     using std::pair;
     enum class NodeType{
