@@ -7,7 +7,7 @@
 namespace maze{
     std::random_device rd;
     std::mt19937 gen(rd());
-    void InitalMaze(Maze &maze,int n){
+    void initalMaze(Maze &maze,int n){
         //设置边界
         for(int i=0;i<n;i++){
             for(int j=0;j<n;j++){
@@ -55,7 +55,7 @@ namespace maze{
 
     vector<vector<Node>> genMaze(int n){
         Maze maze(n,vector<Node>(n,Node{NodeType::R,0}));
-        InitalMaze(maze,n);//生成并初始化，并设置出入口
+        initalMaze(maze,n);//生成并初始化，并设置出入口
         Pass p;
         int reflection=(n+1)/2;
         getPassage(p,0,0,reflection-2,reflection-2);//递归生成迷宫
@@ -223,7 +223,7 @@ namespace maze{
     }
     vector<vector<Node>> genMaze(const std::string &fileName) {
         using json = nlohmann::json;
-        std::ifstream fin("../input.json");
+        std::ifstream fin(fileName);
         if (!fin.is_open()) {
             std::cerr << "无法打开文件 input.json" << std::endl;
             assert(0);
@@ -235,12 +235,15 @@ namespace maze{
 
         // 读取 maze
         auto maze_json= data["maze"];
-        const int n = maze_json.size(), m = maze_json[0].size();
+        const int n = static_cast<int>(maze_json.size()), m = static_cast<int>(maze_json[0].size());
         assert(n > 0 && m > 0);
         Maze maze(maze_json.size(), vector<Node>(maze_json[0].size()));
         for(int i = 0; i < n; ++i){
             for(int j = 0; j < m; ++j){
                 maze[i][j].nodeType = stringToNodeType(maze_json[i][j].get<std::string>());
+                if(maze[i][j].nodeType == NodeType::G) maze[i][j].value = GVAL;
+                else if(maze[i][j].nodeType == NodeType::T) maze[i][j].value = TVAL;
+                else maze[i][j].value = 0;
             }
         }
         return maze;

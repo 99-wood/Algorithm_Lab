@@ -15,6 +15,8 @@
 #include "nlohmann/json.hpp"
 
 namespace maze{
+    constexpr int GVAL = 5;
+    constexpr int TVAL = -3;
     using std::vector;
     using std::pair;
     enum class NodeType{
@@ -72,7 +74,7 @@ namespace maze{
 
 
 
-    void InitalMaze(Maze &maze,int n);//迷宫初始化,规定奇数行为路,偶数行为墙
+    void initalMaze(Maze &maze,int n);//迷宫初始化,规定奇数行为路,偶数行为墙
     bool generatStartOrExit(Maze &maze,int n,NodeType t);
     int generateRandomOdd(int min, int max);//随机数
     int generateRandomEven(int min, int max);
