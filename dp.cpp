@@ -88,7 +88,7 @@ namespace dp{
                 for(const auto [dx, dy] : direction){
                     const int u = x + dx, v = y + dy;
                     if(enable(u, v) && !(u == lastx && v == lasty) && !must[u][v]){
-                        if(f[u][v] + (maze[x][y].nodeType == maze::NodeType::T ? maze[x][y].value : 0) > 0){
+                        if(f[u][v] > 0){
                             genPath(u, v, x, y);
                             path.emplace_back(x, y);
                         }

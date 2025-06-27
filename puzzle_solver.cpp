@@ -30,7 +30,7 @@ namespace game {
 
             std::string guess = std::to_string(password[0]) + std::to_string(password[1]) + std::to_string(password[2]);
             std::string hash = sha256(guess);
-            std::cout << hash << " " << guess << std::endl;
+            // std::cout << hash << " " << guess << std::endl;
             ++tries;
             return hash == targetHash;
         }

@@ -22,3 +22,8 @@ add_executable(sha256test sha256_test.c
         sha256.h
         sha256.c
         )
+add_executable(play play.cpp
+        maze.cpp
+        maze.h
+        maze_navigator.cpp
+        maze_navigator.h)
