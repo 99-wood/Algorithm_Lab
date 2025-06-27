@@ -77,17 +77,29 @@ int main() {
         }
         cout << endl;
     }
+    cout << endl;
+    for(int i = 0; i < n; ++i){
+        for(int j = 0; j < n; ++j){
+            cout << maze[i][j] << " ";
+        }
+        cout << endl;
+    }
     vector vis(n, vector(n, false));
     for(const auto [x, y] : path){
         vis[x][y] = true;
     }
     cout << endl;
+    w = 0;
     for(int i = 0; i < n; ++i){
         for(int j = 0; j < n; ++j){
-            if(vis[i][j]) cout << "_ ";
+            if(vis[i][j]){
+                cout << "_ ";
+                w += origin[i][j].value;
+            }
             else cout << origin[i][j] << " ";
         }
         cout << endl;
     }
+    cout << w << endl;
     return 0;
 }

@@ -8,6 +8,20 @@ namespace maze{
     std::random_device rd;
     std::mt19937 gen(rd());
 
+    Json mazeToJson(const Maze &maze){
+        Json j;
+        for (const auto& row : maze) {
+            Json j_row = Json::array();
+            for (const auto& node : row) {
+                std::stringstream ss;
+                ss << node;
+                j_row.push_back(ss.str()); // 单字符字符串
+            }
+            j["maze"].push_back(j_row);
+        }
+        return j;
+    }
+
     void initalMaze(Maze &maze, const int n) {
         //设置边界
         for(int i = 0; i < n; i++){
@@ -65,6 +79,10 @@ namespace maze{
         generateLoker(maze, n); //生成机关
         generateTrap(maze, n); //生成陷阱
         generateSource(maze, n); //资源生成
+        std::ofstream ofs("../last_maze.json");
+        const Json j = mazeToJson(maze);
+        ofs << j.dump(-1);
+        ofs.close();
         return maze;
     }
 

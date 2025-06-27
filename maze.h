@@ -88,6 +88,8 @@ namespace maze{
     void generateTrap(Maze &maze,int n);
     void generateLoker(Maze &maze,int n);
     void generateBoss(Maze &maze,int n);
+    using Json = nlohmann::json;
+    Json mazeToJson(const Maze &maze);
 }
 
 

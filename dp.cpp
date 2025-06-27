@@ -101,8 +101,8 @@ namespace dp{
         return true;
     }
 
-    bool DP::stateDP() {
-    }
+//    bool DP::stateDP() {
+//    }
 
     bool DP::run() {
         for(int i = 0; i < n; ++i){
@@ -168,15 +168,15 @@ namespace dp{
             for(int j = 0; j < m; ++j){
             }
         }
-
-        if(isTree()){
-            std::cout << "Is tree\n";
-            return finish = treeDP();
-        }
-        else{
-            assert(0);
-            return finish = stateDP();
-        }
+        assert(isTree());
+        return finish = treeDP();
+//        if(isTree()){
+//            std::cout << "Is tree\n";
+//        }
+//        else{
+//            assert(0);
+//            return finish = stateDP();
+//        }
     }
 
     std::vector<std::pair<int, int>> DP::getPath() const {

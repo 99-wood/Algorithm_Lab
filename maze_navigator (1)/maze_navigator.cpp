@@ -133,31 +133,37 @@ bool MazeNavigator::isCriticalPosition(const Position& pos) const {
 
 std::vector<MazeNavigator::Target> MazeNavigator::findAllPotentialTargets(
         const Position& current) const {
+
     std::vector<Target> targets;
 
-    // 第一阶段：优先搜索记忆中的 B/L（优先非陷阱路径）
+    // 第一阶段：搜索记忆中的目标
     for (const auto& [pos, node] : memory_map_) {
-        if ((node.nodeType == maze::NodeType::B || node.nodeType == maze::NodeType::L) &&
+        if ((node.nodeType  == maze::NodeType::B ||
+             node.nodeType  == maze::NodeType::L) &&
             !collected_bl_.count(pos)) {
+
+            // 先尝试不走陷阱
             auto path = findPathToTarget(current, pos, false);
-            if (!path.empty()) {
-                targets.push_back({pos, PRIORITY_WEIGHTS.at(node.nodeType),
-                                   static_cast<int>(path.size()), false});
+            if (!path.empty())  {
+                targets.push_back({pos,  PRIORITY_WEIGHTS.at(node.nodeType),
+                                   static_cast<int>(path.size()),  false});
             } else {
+                // 再尝试走陷阱
                 path = findPathToTarget(current, pos, true);
-                if (!path.empty()) {
-                    targets.push_back({pos, PRIORITY_WEIGHTS.at(node.nodeType),
-                                       static_cast<int>(path.size()), true});
+                if (!path.empty())  {
+                    targets.push_back({pos,  PRIORITY_WEIGHTS.at(node.nodeType),
+                                       static_cast<int>(path.size()),  true});
                 }
             }
         }
     }
 
-    // 第二阶段：如果没有 B/L 目标，优先收集金币（严格禁用陷阱）
+    // 第二阶段：如果没有B/L目标，优先收集金币，之后处理出口
     if (targets.empty()) {
+        // 优先收集金币（不走陷阱）
         for (const auto& [pos, node] : memory_map_) {
             if (node.nodeType == maze::NodeType::G) {
-                auto path = findPathToTarget(current, pos, false);
+                auto path = findPathToTarget(current, pos, false); // 禁用陷阱
                 if (!path.empty()) {
                     targets.push_back({pos, PRIORITY_WEIGHTS.at(node.nodeType),
                                        static_cast<int>(path.size()), false});
@@ -166,7 +172,9 @@ std::vector<MazeNavigator::Target> MazeNavigator::findAllPotentialTargets(
         }
 
         // 如果没有金币可收集，再处理出口（允许陷阱）
+        // 第二阶段补充：金币收集完成后立即触发出口逻辑
         if (targets.empty() && allBLCollected()) {
+            // 寻找出口（允许陷阱）
             for (const auto& [pos, node] : memory_map_) {
                 if (node.nodeType == maze::NodeType::E) {
                     auto path = findPathToTarget(current, pos, true);
@@ -179,49 +187,9 @@ std::vector<MazeNavigator::Target> MazeNavigator::findAllPotentialTargets(
         }
     }
 
-    // 第三阶段：探索未走过的空格（R）或可扩展视野的通路
+    // 第三阶段：全局搜索未记忆的关键目标
+    // 第三阶段补充：全局搜索未记忆的金币
     if (targets.empty()) {
-        // 1. 探索已走过的通路中，周围仍有未记忆区域的节点
-        for (const auto& [pos, node] : memory_map_) {
-            if (node.nodeType == maze::NodeType::R && !isCriticalPosition(pos)) {
-                auto neighbors = getNeighbors(pos, true);
-                bool has_unexplored = false;
-                for (const auto& neighbor : neighbors) {
-                    if (!memory_map_.count(neighbor)) {
-                        has_unexplored = true;
-                        break;
-                    }
-                }
-
-                if (has_unexplored) {
-                    auto path = findPathToTarget(current, pos, true);
-                    if (!path.empty()) {
-                        targets.push_back({pos, 5, static_cast<int>(path.size()), true});
-                    }
-                }
-            }
-        }
-
-        // 2. 如果仍无目标，尝试全局搜索未记忆的通路
-        if (targets.empty()) {
-            for (size_t i = 0; i < maze_.size(); ++i) {
-                for (size_t j = 0; j < maze_[i].size(); ++j) {
-                    Position pos(i, j);
-                    if (maze_[i][j].nodeType == maze::NodeType::R &&
-                        !memory_map_.count(pos)) {
-                        auto path = findPathToTarget(current, pos, true);
-                        if (!path.empty()) {
-                            targets.push_back({pos, 5, static_cast<int>(path.size()), true});
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    // 第四阶段：全局搜索未记忆的金币和 B/L（优先金币，再 B/L，最后出口）
-    if (targets.empty()) {
-        // 1. 全局搜索未记忆的金币（禁用陷阱）
         for (size_t i = 0; i < maze_.size(); ++i) {
             for (size_t j = 0; j < maze_[i].size(); ++j) {
                 Position pos(i, j);
@@ -235,48 +203,28 @@ std::vector<MazeNavigator::Target> MazeNavigator::findAllPotentialTargets(
                 }
             }
         }
+    }
 
-        // 2. 再次尝试收集 memory_map_ 中未被收集的金币（允许陷阱）
-        for (const auto& [pos, node] : memory_map_) {
-            if (node.nodeType == maze::NodeType::G) {
-                auto path = findPathToTarget(current, pos, true);
-                if (!path.empty()) {
-                    targets.push_back({pos, PRIORITY_WEIGHTS.at(node.nodeType),
-                                       static_cast<int>(path.size()), true});
-                }
-            }
-        }
+    if (targets.empty()  && (!allBLCollected() || !exit_found_)) {
+        for (size_t i = 0; i < maze_.size(); ++i) {
+            for (size_t j = 0; j < maze_[i].size(); ++j) {
+                Position pos(i, j);
+                auto nodeType = maze_[i][j].nodeType;
 
-        // 3. 全局搜索未记忆的 B/L（强制允许陷阱）
-        if (targets.empty()) {
-            for (size_t i = 0; i < maze_.size(); ++i) {
-                for (size_t j = 0; j < maze_[i].size(); ++j) {
-                    Position pos(i, j);
-                    auto nodeType = maze_[i][j].nodeType;
-                    if ((nodeType == maze::NodeType::B || nodeType == maze::NodeType::L) &&
-                        !collected_bl_.count(pos)) {
-                        auto path = findPathToTarget(current, pos, true);
-                        if (!path.empty()) {
-                            targets.push_back({pos, PRIORITY_WEIGHTS.at(nodeType),
-                                               static_cast<int>(path.size()), true});
-                        }
+                if ((nodeType == maze::NodeType::B || nodeType == maze::NodeType::L) &&
+                    !collected_bl_.count(pos)) {
+
+                    auto path = findPathToTarget(current, pos, true);
+                    if (!path.empty())  {
+                        targets.push_back({pos,  PRIORITY_WEIGHTS.at(nodeType),
+                                           static_cast<int>(path.size()),  true});
                     }
                 }
-            }
-        }
-
-        // 4. 如果所有 B/L 已收集但出口未找到，再处理出口（允许陷阱）
-        if (targets.empty() && allBLCollected() && !exit_found_) {
-            for (size_t i = 0; i < maze_.size(); ++i) {
-                for (size_t j = 0; j < maze_[i].size(); ++j) {
-                    Position pos(i, j);
-                    auto nodeType = maze_[i][j].nodeType;
-                    if (nodeType == maze::NodeType::E) {
-                        auto path = findPathToTarget(current, pos, true);
-                        if (!path.empty()) {
-                            targets.push_back({pos, PRIORITY_WEIGHTS.at(nodeType),
-                                               static_cast<int>(path.size()), true});
-                        }
+                else if (nodeType == maze::NodeType::E && !exit_found_ && allBLCollected()) {
+                    auto path = findPathToTarget(current, pos, true);
+                    if (!path.empty())  {
+                        targets.push_back({pos,  PRIORITY_WEIGHTS.at(nodeType),
+                                           static_cast<int>(path.size()),  true});
                     }
                 }
             }
