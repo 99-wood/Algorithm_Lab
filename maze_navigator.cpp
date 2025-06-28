@@ -313,7 +313,7 @@ std::pair<std::vector<MazeNavigator::Position>, int> MazeNavigator::findPath() {
             }
         }
     }
-    if (current.first  == -1) throw std::runtime_error("Maze has no start point");
+    if (current.first == -1) throw std::runtime_error("Maze has no start point");
 
     path.push_back(current);
     updateMemory(current);
@@ -323,35 +323,34 @@ std::pair<std::vector<MazeNavigator::Position>, int> MazeNavigator::findPath() {
 
     while (step_count++ < max_steps) {
         auto next = findHighestPriorityTarget(current);
-        if (next.first  == -1) break;
+        if (next.first == -1) break;
 
-        // 确定是否需要允许走陷阱
         bool allow_traps = false;
         auto targets = findAllPotentialTargets(current);
         for (const auto& t : targets) {
-            if (t.pos  == next && t.requires_trap)  {
+            if (t.pos == next && t.requires_trap) {
                 allow_traps = true;
                 break;
             }
         }
 
         auto path_segment = findPathToTarget(current, next, allow_traps);
-        if (path_segment.empty())  {
-            std::cerr << "Warning: No path to target ("
-                      << next.first  << "," << next.second  << ")\n";
+        if (path_segment.empty()) {
+            std::cerr << "Warning: No path to target (" << next.first << "," << next.second << ")\n";
             break;
         }
 
+        // ✅ 修改点：路径段中每个节点都调用 collectResource
         for (const auto& pos : path_segment) {
             path.push_back(pos);
             updateMemory(pos);
+            collectResource(pos); // ✅ 每个节点都触发 collectResource
         }
-        collectResource(next);
+
         current = next;
 
         // 终止条件
-        if (maze_[current.first][current.second].nodeType == maze::NodeType::E &&
-            allBLCollected()) {
+        if (maze_[current.first][current.second].nodeType == maze::NodeType::E && allBLCollected()) {
             break;
         }
     }
@@ -360,11 +359,10 @@ std::pair<std::vector<MazeNavigator::Position>, int> MazeNavigator::findPath() {
     if (!allBLCollected()) {
         std::cerr << "Warning: Not all B/L collected!\n";
         for (const auto& [pos, node] : memory_map_) {
-            if ((node.nodeType  == maze::NodeType::B ||
-                 node.nodeType  == maze::NodeType::L) &&
+            if ((node.nodeType == maze::NodeType::B || node.nodeType == maze::NodeType::L) &&
                 !collected_bl_.count(pos)) {
                 std::cerr << "  Missing " << node.nodeType
-                          << " at (" << pos.first  << "," << pos.second  << ")\n";
+                          << " at (" << pos.first << "," << pos.second << ")\n";
             }
         }
     }

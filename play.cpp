@@ -9,7 +9,7 @@ using namespace std;
 using Maze = maze::Maze;
 
 int main() {
-    Maze maze = maze::genMaze(11);
+    Maze maze = maze::genMaze(15);
     const Maze origin = maze;
     MazeNavigator greedyRunner(maze);
     const auto [path, best] = greedyRunner.findPath();
