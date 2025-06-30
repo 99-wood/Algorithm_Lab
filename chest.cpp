@@ -41,3 +41,7 @@ void Chest::setTarget(const State target) {
     this->target = target;
     return;
 }
+
+ChestState Chest::getState() const {
+    return state;
+}

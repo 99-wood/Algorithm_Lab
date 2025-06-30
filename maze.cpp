@@ -297,4 +297,18 @@ namespace maze{
         }
         return maze;
     }
+
+    bool printJson(const Json &j, const char *fileName){
+        // 打开输出文件
+        std::ofstream outFile(fileName);
+        if (!outFile) {
+            std::cerr << "无法打开文件用于写入!" << std::endl;
+            return false;
+        }
+
+        outFile << j.dump(4);  // 使用缩进为4的格式化输出，可选
+
+        outFile.close();
+        return true;
+    }
 }

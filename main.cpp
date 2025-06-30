@@ -5,12 +5,14 @@
 #include "boss_strategy.h"
 #include "maze_navigator.h"
 
-using json = nlohmann::json;
+using Json = nlohmann::json;
 using namespace std;
 using Maze = maze::Maze;
 bool solve() {
     int n = 15;
-    const Maze maze = maze::genMaze("../test.json");
+    const Maze maze = maze::genMaze(n);
+    const Json json = mazeToJson(maze);
+    maze::printJson(json, "../Test_Data/first/maze2.json");
     n = maze.size();
     for (const auto &row: maze) {
         cout << '[';

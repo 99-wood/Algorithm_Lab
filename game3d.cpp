@@ -162,13 +162,16 @@ int main() {
     const Cube chestUpCube(&chestUpSideTexture, &chestUpSideTexture, &chestUpSideTexture, &chestUpSideTexture, &chestTopTexture, nullptr);
     const Cube chestDownCube(&chestDownFrontTexture, &chestDownSideTexture, &chestDownSideTexture, &chestDownSideTexture, nullptr, &chestTopTexture);
     Chest chest(&chestUpCube, &chestDownCube);
-    chest.setTarget(ChestState::CLOSE);
+    chest.setTarget(ChestState::OPEN);
     const Slime slimeCube(&slimeTexture);
     Player player(&headCube, &bodyCube, &armCube, &armCube, &legCube, &legCube);
 
 
     int n = 15;
-    const Maze originMaze = maze::genMaze(n);
+    const Maze originMaze = maze::genMaze("../Test_Data/first/dp/hard/maze_15_15_2.json");
+//    const Maze originMaze = maze::genMaze(n);
+    const nlohmann::json json = maze::mazeToJson(originMaze);
+    maze::printJson(json, "../Test_Data/first/maze2.json");
     auto maze = originMaze;
     n = static_cast<int>(originMaze.size());
     dp::DP dpRuner(originMaze);
@@ -192,6 +195,10 @@ int main() {
     controller.setSpeed(3);
     int w = 0;
     while(!glfwWindowShouldClose(window)){
+        if(chest.getState() != ChestState::HALF){
+            if(chest.getState() == ChestState::OPEN) chest.setTarget(ChestState::CLOSE);
+            else chest.setTarget(ChestState::OPEN);
+        }
         processInput(window, &controller);
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -199,11 +206,12 @@ int main() {
         if(it != path.end() && controller.isAvailable() && controller.isQueueEmpty()){
             controller.addAction({1, it->first, it->second});
             if(!vis[x][y]){
-                w += maze[x][y].value;
+                w += maze[x][y].value > 10000 ? 0 : maze[x][y].value;
                 vis[x][y] = true;
-                maze[x][y].nodeType = maze::NodeType::R;
+                if(maze[x][y].nodeType != maze::NodeType::L && maze[x][y].nodeType != maze::NodeType::B) maze[x][y].nodeType = maze::NodeType::R;
                 maze[x][y].value = 0;
             }
+            std::cout << x << " " << y << " " << w << std::endl;
             x = it->first;
             y = it->second;
             for(int i = x - 1; i <= x + 1; ++i){
@@ -254,7 +262,7 @@ int main() {
                 else if(maze[i][j].nodeType == maze::NodeType::B){
                     roadCube.draw(model, view, projection);
                     model = glm::scale(model, glm::vec3(0.7f, 0.7f, 0.7f));
-                    model = glm::translate(model, glm::vec3(0, 0.85, 0));
+                    model = glm::translate(model, glm::vec3(0, 1.3f, 0));
                     slimeCube.draw(model, view, projection);
                 }
                 else{
@@ -272,7 +280,7 @@ int main() {
 
         std::stringstream ss;
         ss << "current value: ";
-        ss << w % maze::BVAL;
+        ss << w;
         ch::RenderText(ss.str(), 1080.0f, 680.0f, 0.5f, glm::vec3(0.5f, 0.8f, 0.2f));
         ch::RenderText("DP demo", 10.0f, 680.0f, 0.5f, glm::vec3(0.3f, 0.7f, 0.9f));
 
