@@ -4,8 +4,13 @@ project(maze_game)
 set(CMAKE_CXX_STANDARD 20)
 MATH(EXPR stack_size "100*1024*1024")
 set(CMAKE_EXE_LINKER_FLAGS "-Wl,--stack,${stack_size}")
+set(CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc -static-libstdc++")
 #include_directories("./include/include")
 include_directories("./include")
+
+#find_package(Freetype REQUIRED CONFIG)
+add_subdirectory("./freetype/freetype-2.13.3")
+
 add_executable(maze_game main.cpp
         maze.cpp
         maze.h
@@ -41,8 +46,8 @@ add_executable(game3d game3d.cpp
         cube.h
         object.cpp
         object.h
-        Character.cpp
-        character.h
+        Player.cpp
+        Player.h
         slime.cpp
         slime.h
         chest.cpp
@@ -50,12 +55,16 @@ add_executable(game3d game3d.cpp
         maze.cpp
         maze.h
         dp.cpp
-        dp.h)
+        dp.h
+        ch.cpp
+        ch.h)
 link_directories(${PROJECT_SOURCE_DIR}/lib)
 target_link_libraries(game3d PRIVATE
         ${CMAKE_SOURCE_DIR}/lib/libglfw3dll.a
         opengl32
 )
+target_link_libraries(game3d PRIVATE
+        freetype)
 add_custom_command(TARGET game3d POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
         ${CMAKE_SOURCE_DIR}/lib/glfw3.dll

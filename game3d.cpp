@@ -6,12 +6,17 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <fstream>
+#include <ft2build.h>
+
+#include "ch.h"
+
+#include FT_FREETYPE_H
 
 #include "cube.h"
 #include "shader.h"
 #include "stb_image.h"
 #include "texture.h"
-#include "character.h"
+#include "player.h"
 #include "chest.h"
 #include "dp.h"
 #include "maze.h"
@@ -25,7 +30,7 @@ void framebuffer_size_callback(GLFWwindow *window, const int width, const int he
 constexpr float radius = 6.0f; // 摄像机距原点的距离
 float yaw = glm::radians(45.0f); // 初始旋转角度
 // constexpr auto target = glm::vec3{0, 1.5, 0};
-void processInput(GLFWwindow *window, CharacterController *controller) {
+void processInput(GLFWwindow *window, PlayerController *controller) {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
         glfwSetWindowShouldClose(window, true);
     }
@@ -88,6 +93,7 @@ void init() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // 核心模式
 
     // 创建窗口
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
     window = glfwCreateWindow(screenWidth, screenHeight, "OpenGL Maze", nullptr, nullptr);
     if(window == nullptr){
         std::cerr << "Failed to create GLFW window\n";
@@ -113,6 +119,15 @@ void init() {
 using Maze = maze::Maze;
 int main() {
     init();
+    ch::load();
+    ch::init(screenWidth, screenHeight);
+    // OpenGL setting
+    {
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    }
     const Texture wallTexture("../texture/wall/wall.png");
     const Texture woodTexture("../texture/wood.png");
     const Texture snowTexture("../texture/snow.png");
@@ -149,30 +164,33 @@ int main() {
     Chest chest(&chestUpCube, &chestDownCube);
     chest.setTarget(ChestState::CLOSE);
     const Slime slimeCube(&slimeTexture);
-    Character player(&headCube, &bodyCube, &armCube, &armCube, &legCube, &legCube);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    Player player(&headCube, &bodyCube, &armCube, &armCube, &legCube, &legCube);
+
 
     int n = 15;
-    Maze maze = maze::genMaze(n);
-    n = static_cast<int>(maze.size());
-    dp::DP dpRuner(maze);
+    const Maze originMaze = maze::genMaze(n);
+    auto maze = originMaze;
+    n = static_cast<int>(originMaze.size());
+    dp::DP dpRuner(originMaze);
     dpRuner.run();
     const auto path = dpRuner.getPath();
+    const auto W = dpRuner.getValue();
+    std::cout << "value: " << W % maze::BVAL << std::endl;
     std::vector see(n, std::vector(n, false));
+    std::vector vis(n, std::vector(n, false));
     // const std::vector<std::pair<int, int>> path{{0, 0}, {1, 0}, {1, 1}, {2, 1}};
     auto it = path.begin();
     auto [x, y] = *it;
+    vis[x][y] = true;
     for(int i = x - 1; i <= x + 1; ++i){
         for(int j = y - 1; j <= y + 1; ++j){
             if(i >= 0 && i < n && j >= 0 && j < n) see[i][j] = true;
         }
     }
-    CharacterController controller(&player, *it);
+    PlayerController controller(&player, *it);
     ++it;
     controller.setSpeed(3);
-
+    int w = 0;
     while(!glfwWindowShouldClose(window)){
         processInput(window, &controller);
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -180,7 +198,14 @@ int main() {
 
         if(it != path.end() && controller.isAvailable() && controller.isQueueEmpty()){
             controller.addAction({1, it->first, it->second});
-            auto [x, y] = *it;
+            if(!vis[x][y]){
+                w += maze[x][y].value;
+                vis[x][y] = true;
+                maze[x][y].nodeType = maze::NodeType::R;
+                maze[x][y].value = 0;
+            }
+            x = it->first;
+            y = it->second;
             for(int i = x - 1; i <= x + 1; ++i){
                 for(int j = y - 1; j <= y + 1; ++j){
                     if(i >= 0 && i < n && j >= 0 && j < n) see[i][j] = true;
@@ -244,6 +269,12 @@ int main() {
         slimeCube.draw(model, view, projection);
 
         controller.update(view, projection);
+
+        std::stringstream ss;
+        ss << "current value: ";
+        ss << w % maze::BVAL;
+        ch::RenderText(ss.str(), 1080.0f, 680.0f, 0.5f, glm::vec3(0.5f, 0.8f, 0.2f));
+        ch::RenderText("DP demo", 10.0f, 680.0f, 0.5f, glm::vec3(0.3f, 0.7f, 0.9f));
 
         glfwSwapBuffers(window);
         glfwPollEvents();
