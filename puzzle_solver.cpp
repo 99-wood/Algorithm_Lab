@@ -8,7 +8,7 @@
 #include <unordered_set>
 
 using json = nlohmann::json;
-namespace game {
+namespace guess {
 // 构造函数
     PuzzleSolver::PuzzleSolver(const std::string &targetHash, const std::vector<Clue> &clues)
             : targetHash(targetHash), clues(clues) {}

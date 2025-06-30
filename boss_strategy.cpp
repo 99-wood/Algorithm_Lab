@@ -10,7 +10,7 @@
 
 using json = nlohmann::json;
 
-namespace game {
+namespace boss {
 
     void BossStrategy::init(const std::vector<Skill>& skills, const std::vector<int>& bossHPs) {
         skillSet = skills;
@@ -40,13 +40,13 @@ namespace game {
         return oss.str();
     }
 
-    std::vector<std::string> BossStrategy::findOptimalSequence(bool verbose) {
+    std::vector<int> BossStrategy::findOptimalSequence(bool verbose) {
         struct State {
             std::vector<int> bossHPs;
             int currentBossIndex;
             int turn;
             std::vector<int> cooldownStatus;
-            std::vector<std::string> skillSequence;
+            std::vector<int> skillSequence;
 
             bool operator<(const State& other) const {
                 return turn > other.turn;
@@ -66,7 +66,7 @@ namespace game {
         pq.push(init);
 
         int bestTurn = INT_MAX;
-        std::vector<std::string> bestPlan;
+        std::vector<int> bestPlan;
 
         int expandedNodes = 0;
         int prunedBranches = 0;
@@ -128,7 +128,7 @@ namespace game {
                 }
                 next.cooldownStatus[i] = skill.cooldown;
 
-                next.skillSequence.push_back("Turn " + std::to_string(next.turn) + ": " + skill.name);
+                next.skillSequence.push_back(skill.id);
                 pq.push(next);
             }
 
@@ -138,7 +138,7 @@ namespace game {
                 for (size_t j = 0; j < next.cooldownStatus.size(); ++j) {
                     if (next.cooldownStatus[j] > 0) next.cooldownStatus[j]--;
                 }
-                next.skillSequence.push_back("Turn " + std::to_string(next.turn) + ": Wait");
+                next.skillSequence.push_back(-1);
                 pq.push(next);
             }
         }
@@ -183,10 +183,27 @@ namespace game {
             }
             int damage = skillArr[0].get<int>();
             int cooldown = skillArr[1].get<int>();
-            skills.push_back({ "Skill" + std::to_string(index++), damage, cooldown });
+            skills.emplace_back(index++, damage, cooldown);
         }
 
         return { bossHPs, skills };
+    }
+
+    int loadMinNum(const std::string& fileName) {
+        using json = nlohmann::json;
+        std::ifstream fin(fileName);
+        if(!fin.is_open()){
+            std::cerr << "无法打开文件 input.json" << std::endl;
+            assert(0);
+        }
+
+        // 解析 JSON
+        json data;
+        fin >> data;
+
+        // 读取 maze
+        auto j = data["min_turns"];
+        return j.get<int>();
     }
 
 } // namespace MazeGame

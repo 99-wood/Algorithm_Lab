@@ -8,6 +8,7 @@
 #include <fstream>
 #include <ft2build.h>
 
+#include "boss_strategy.h"
 #include "ch.h"
 
 #include FT_FREETYPE_H
@@ -20,8 +21,10 @@
 #include "chest.h"
 #include "dp.h"
 #include "maze.h"
+#include "puzzle_solver.h"
 #include "slime.h"
-constexpr int screenWidth = 1280, screenHeight = 720;
+constexpr int screenWidth = 1920, screenHeight = 1080;
+constexpr int messageBoxSize = 10;
 
 void framebuffer_size_callback(GLFWwindow *window, const int width, const int height) {
     glViewport(0, 0, width, height); // 设置视口区域
@@ -117,6 +120,10 @@ void init() {
 }
 
 using Maze = maze::Maze;
+
+enum class State {
+    WALK, FIGHT, GUESS
+};
 int main() {
     init();
     ch::load();
@@ -162,65 +169,213 @@ int main() {
     const Cube chestUpCube(&chestUpSideTexture, &chestUpSideTexture, &chestUpSideTexture, &chestUpSideTexture, &chestTopTexture, nullptr);
     const Cube chestDownCube(&chestDownFrontTexture, &chestDownSideTexture, &chestDownSideTexture, &chestDownSideTexture, nullptr, &chestTopTexture);
     Chest chest(&chestUpCube, &chestDownCube);
-    chest.setTarget(ChestState::OPEN);
     const Slime slimeCube(&slimeTexture);
     Player player(&headCube, &bodyCube, &armCube, &armCube, &legCube, &legCube);
 
+    std::cout << "Start Guess Test" << std::endl;
+    for(int i = 0; i <= 29; ++i){
+        std::stringstream ss;
+        ss << "../Test_Data/official/guess/pwd_0";
+        if(i < 10) ss << 0;
+        ss << i;
+        ss << ".json";
+        const auto [hash, clues] = guess::PuzzleSolver::loadPuzzleData(ss.str());
+        guess::PuzzleSolver guessSolver(hash, clues);
+        guessSolver.solve();
+        const std::string pwd = guessSolver.ans;
+        std::cout << "test" << i << ": ";
+        assert(!pwd.empty());
+        if(guess::PuzzleSolver::sha256(pwd) == hash){
+            std::cout << "OK Answer: " << pwd << std::endl;
+        }
+        else{
+            std::cout << "Wrong" << std::endl;
+        }
+    }
+    std::cout << "Start Boss Test" << std::endl;
+    for(int i = 1; i <= 9; ++i){
+        std::stringstream ss;
+        ss << "../Test_Data/official/BOSS/boss_case_";
+        ss << i;
+        ss << ".json";
+        // std::cout << ss.str() << std::endl;
+        const auto [bossHPs, skills] = boss::loadBossBattleData(ss.str());
+        const int minTurn = boss::loadMinNum(ss.str());
+        boss::BossStrategy strategy;
+        strategy.init(skills, bossHPs);
+        const std::vector<int> plan = strategy.findOptimalSequence(false);
+        if(plan.size() <= minTurn){
+            std::cout << "OK Answer: " << plan.size() << std::endl;
+        }
+        else{
+            std::cout << "Wrong" << std::endl;
+        }
+    }
 
     int n = 15;
     const Maze originMaze = maze::genMaze("../Test_Data/first/dp/hard/maze_15_15_2.json");
 //    const Maze originMaze = maze::genMaze(n);
+    const auto [bossHPs, skills] = boss::loadBossBattleData("../Test_Data/official/BOSS/boss_case_2.json");
+    const auto [hash, clues] = guess::PuzzleSolver::loadPuzzleData("../Test_Data/official/guess/pwd_002.json");
+
+    // 导出地图
     const nlohmann::json json = maze::mazeToJson(originMaze);
     maze::printJson(json, "../Test_Data/first/maze2.json");
+
+    // DP 计算路径
     auto maze = originMaze;
     n = static_cast<int>(originMaze.size());
     dp::DP dpRuner(originMaze);
     dpRuner.run();
     const auto path = dpRuner.getPath();
     const auto W = dpRuner.getValue();
+
+    // 计算 BOSS
+    boss::BossStrategy strategy;
+    strategy.init(skills, bossHPs);
+    std::cout << " Executing Branch and Bound...\n";
+    const std::vector<int> plan = strategy.findOptimalSequence(false);
+    for(auto x : plan){
+        std::cout << x << " ";
+    }
+    std::cout << std::endl;
+    auto skillIt = plan.begin();
+    auto currentBossHps = bossHPs;
+    auto bossIt = currentBossHps.begin();
+    auto currentSkills = skills;
+    for(auto &[id, damage, cooldown] : currentSkills){
+        cooldown = 0;
+    }
+
+    // 猜
+    guess::PuzzleSolver guessSolver(hash, clues);
+    guessSolver.solve();
+    const std::string pwd = guessSolver.ans;
+    const int guessTries = guessSolver.tries;
+
+    State state = State::WALK;
+    std::vector<std::string> messageL;
+    std::vector<std::string> messageR;
+
     std::cout << "value: " << W % maze::BVAL << std::endl;
     std::vector see(n, std::vector(n, false));
     std::vector vis(n, std::vector(n, false));
-    // const std::vector<std::pair<int, int>> path{{0, 0}, {1, 0}, {1, 1}, {2, 1}};
-    auto it = path.begin();
-    auto [x, y] = *it;
+    auto pathIt = path.begin();
+    auto [x, y] = *pathIt;
     vis[x][y] = true;
     for(int i = x - 1; i <= x + 1; ++i){
         for(int j = y - 1; j <= y + 1; ++j){
             if(i >= 0 && i < n && j >= 0 && j < n) see[i][j] = true;
         }
     }
-    PlayerController controller(&player, *it);
-    ++it;
+    PlayerController controller(&player, *pathIt);
+    ++pathIt;
     controller.setSpeed(3);
     int w = 0;
     while(!glfwWindowShouldClose(window)){
-        if(chest.getState() != ChestState::HALF){
-            if(chest.getState() == ChestState::OPEN) chest.setTarget(ChestState::CLOSE);
-            else chest.setTarget(ChestState::OPEN);
-        }
         processInput(window, &controller);
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        if(it != path.end() && controller.isAvailable() && controller.isQueueEmpty()){
-            controller.addAction({1, it->first, it->second});
-            if(!vis[x][y]){
-                w += maze[x][y].value > 10000 ? 0 : maze[x][y].value;
-                vis[x][y] = true;
-                if(maze[x][y].nodeType != maze::NodeType::L && maze[x][y].nodeType != maze::NodeType::B) maze[x][y].nodeType = maze::NodeType::R;
-                maze[x][y].value = 0;
-            }
-            std::cout << x << " " << y << " " << w << std::endl;
-            x = it->first;
-            y = it->second;
-            for(int i = x - 1; i <= x + 1; ++i){
-                for(int j = y - 1; j <= y + 1; ++j){
-                    if(i >= 0 && i < n && j >= 0 && j < n) see[i][j] = true;
+        if(state == State::WALK){
+            controller.setSpeed(3);
+            if(pathIt != path.end() && controller.isAvailable() && controller.isQueueEmpty()){
+                if(!vis[x][y]){
+                    w += maze[x][y].value > 10000 ? 0 : maze[x][y].value;
+                    vis[x][y] = true;
+                    assert(maze[x][y].nodeType != maze::NodeType::L && maze[x][y].nodeType != maze::NodeType::B);
+                    maze[x][y].nodeType = maze::NodeType::R;
+                    maze[x][y].value = 0;
+                }
+                std::cout << x << " " << y << " " << w << std::endl;
+                if(maze[pathIt->first][pathIt->second].nodeType == maze::NodeType::B){
+                    state = State::FIGHT;
+                    controller.addAction({3, pathIt->first - x, pathIt->second - y});
+                }
+                else if(maze[pathIt->first][pathIt->second].nodeType == maze::NodeType::L){
+                    state = State::GUESS;
+                    controller.addAction({3, pathIt->first - x, pathIt->second - y});
+                }
+                else{
+                    controller.addAction({1, pathIt->first, pathIt->second});
+                    x = pathIt->first;
+                    y = pathIt->second;
+                    for(int i = x - 1; i <= x + 1; ++i){
+                        for(int j = y - 1; j <= y + 1; ++j){
+                            if(i >= 0 && i < n && j >= 0 && j < n) see[i][j] = true;
+                        }
+                    }
+                    ++pathIt;
                 }
             }
-            ++it;
         }
+        else if(state == State::FIGHT){
+            controller.setSpeed(0.5);
+            static int round = 0;
+            if(controller.isAvailable() && controller.isQueueEmpty()){
+                if(skillIt != plan.end()){
+                    ++round;
+                    for(auto &[id, damage, cooldown] : currentSkills){
+                        cooldown -= std::min(1, cooldown);
+                    }
+                    std::cout << std::endl;
+                    controller.addAction({2, 0, 0});
+                    assert(bossIt != currentBossHps.end());
+                    if(currentSkills[*skillIt].cooldown > 0){
+                        std::cout << *skillIt << " " << currentSkills[*skillIt].cooldown;
+                    }
+                    assert(currentSkills[*skillIt].cooldown == 0);
+                    *bossIt = std::max(*bossIt - skills[*skillIt].damage, 0);
+                    std::stringstream ss;
+                    ss << "round" << round << ": use skill: " << *skillIt << " damage: " << skills[*skillIt].damage << " bossHp: " << *bossIt << std::endl;
+                    std::string info;
+                    std::getline(ss, info);
+                    messageL.push_back(info);
+                    if(*bossIt == 0) ++bossIt;
+                    currentSkills[*skillIt].cooldown = skills[*skillIt].cooldown + 1;
+                    ++skillIt;
+                }
+                else{
+                    assert(bossIt == currentBossHps.end());
+                    maze[pathIt->first][pathIt->second].nodeType = maze::NodeType::R;
+                    state = State::WALK;
+                }
+            }
+        }
+        else{
+            assert(state == State::GUESS);
+            static int finish = 0;
+            controller.setSpeed(0.5);
+            if(!finish && controller.isAvailable() && controller.isQueueEmpty()){
+                controller.addAction({2, 0, 0});
+                std::stringstream ss;
+                if(pwd.empty()){
+                    ss << "No Answer!";
+                    ss << " Tries: " << guessTries;
+                    w -= guessTries;
+                }
+                else{
+                    ss << "Answer: " << pwd;
+                    ss << " Tries: " << guessTries;
+                    ss << " Hash: " << guess::PuzzleSolver::sha256(pwd);
+                    w -= guessTries;
+                }
+                std::string info;
+                std::getline(ss, info);
+                messageR.push_back(info);
+                chest.setTarget(ChestState::OPEN);
+                finish = 1;
+            }
+            if(chest.getState() == ChestState::OPEN){
+                chest.setTarget(ChestState::CLOSE);
+                finish = 2;
+            }
+            if(chest.getState() == ChestState::CLOSE && finish == 2){
+                maze[pathIt->first][pathIt->second].nodeType = maze::NodeType::R;
+                state = State::WALK;
+            }
+        }
+
         const auto tmp = controller.getCurrentPos();
         const glm::vec3 target{tmp.second, PLAYER_HEIGHT * 2, tmp.first};
         auto cameraPos = glm::vec3(target.x + radius * std::sin(yaw) * 1.5f, radius * 1.5f,
@@ -281,8 +436,16 @@ int main() {
         std::stringstream ss;
         ss << "current value: ";
         ss << w;
-        ch::RenderText(ss.str(), 1080.0f, 680.0f, 0.5f, glm::vec3(0.5f, 0.8f, 0.2f));
-        ch::RenderText("DP demo", 10.0f, 680.0f, 0.5f, glm::vec3(0.3f, 0.7f, 0.9f));
+        ch::RenderText(ss.str(), screenWidth - 200.0f, screenHeight - 30.0f, 0.5f, glm::vec3(0.5f, 0.8f, 0.2f));
+        ch::RenderText("DP demo", 10.0f, screenHeight - 30.0f, 0.5f, glm::vec3(0.3f, 0.7f, 0.9f));
+        auto it = messageL.rbegin();
+        for(int i = 1; i <= messageBoxSize && it != messageL.rend(); ++i, ++it){
+            ch::RenderText(*it, 10.0f, static_cast<float>(screenHeight) - 30.0f - static_cast<float>(i) * 30.0f, 0.5f, glm::vec3(0.9f, 0.7f, 0.3f));
+        }
+        it = messageR.rbegin();
+        for(int i = 1; i <= messageBoxSize && it != messageR.rend(); ++i, ++it){
+            ch::RenderText(*it, screenWidth - 800.0f, static_cast<float>(screenHeight) - 30.0f - static_cast<float>(i) * 30.0f, 0.5f, glm::vec3(0.9f, 0.7f, 0.3f));
+        }
 
         glfwSwapBuffers(window);
         glfwPollEvents();

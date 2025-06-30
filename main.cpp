@@ -40,19 +40,19 @@ bool solve() {
     cout << w << endl;
 //    for(auto [x, y] : dpPath) cout << x + 1 << " " << y + 1 << endl;
     cout << "------------------------------------------------------------------" << endl;
-    const auto [bossHPs, skills] = game::loadBossBattleData("../test.json");
+    const auto [bossHPs, skills] = guess::loadBossBattleData("../test.json");
 
-    game::BossStrategy strategy;
+    guess::BossStrategy strategy;
     strategy.init(skills, bossHPs);
 
     std::cout << " Executing Branch and Bound...\n";
-    std::vector<std::string> plan = strategy.findOptimalSequence(false);
+    const std::vector<int> plan = strategy.findOptimalSequence(false);
     for (const auto &step: plan) {
         std::cout << step << "\n";
     }
     cout << "------------------------------------------------------------------" << endl;
-    auto [hash, clues] = game::PuzzleSolver::loadPuzzleData("../test.json");
-    game::PuzzleSolver solver(hash, clues);
+    auto [hash, clues] = guess::PuzzleSolver::loadPuzzleData("../test.json");
+    guess::PuzzleSolver solver(hash, clues);
     solver.solve();
     const string pwd = solver.ans;
     if (!pwd.empty())

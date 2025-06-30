@@ -103,7 +103,7 @@ namespace ch{
         INIDED = true;
     }
 
-    inline void RenderText(std::string text, GLfloat x, const GLfloat y, const GLfloat scale, const glm::vec3 color, const Shader &s = *chShader){
+    inline void RenderText(const std::string &text, GLfloat x, const GLfloat y, const GLfloat scale, const glm::vec3 color, const Shader &s = *chShader){
         assert(INIDED);
         // 激活对应的渲染状态
         s.use();

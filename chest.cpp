@@ -5,6 +5,7 @@
 #include "chest.h"
 
 void Chest::draw(const glm::mat4 &model, const glm::mat4 &view, const glm::mat4 &projection) {
+    if(!enable) return;
     const float to = target == State::CLOSE ? glm::radians(90.0f) : glm::radians(0.0f);
     const auto t = static_cast<float>(glfwGetTime());
     if(std::fabs(to - angle) <= glm::radians(90.0f) * v * (t - lastTime)){
@@ -44,4 +45,8 @@ void Chest::setTarget(const State target) {
 
 ChestState Chest::getState() const {
     return state;
+}
+
+bool Chest::setEnable(const bool en) {
+    enable = en;
 }

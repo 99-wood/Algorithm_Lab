@@ -57,7 +57,13 @@ add_executable(game3d game3d.cpp
         dp.cpp
         dp.h
         ch.cpp
-        ch.h)
+        ch.h
+        boss_strategy.cpp
+        boss_strategy.h
+        puzzle_solver.cpp
+        puzzle_solver.h
+        sha256.h
+        sha256.c)
 link_directories(${PROJECT_SOURCE_DIR}/lib)
 target_link_libraries(game3d PRIVATE
         ${CMAKE_SOURCE_DIR}/lib/libglfw3dll.a

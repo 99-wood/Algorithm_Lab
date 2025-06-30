@@ -21,13 +21,15 @@ class Chest : public Object {
     State target;
     float lastTime;
     float v;
+    bool enable;
 public:
     explicit Chest(const Cube *up, const Cube *down)
-        : up(up), down(down), state(State::CLOSE), angle(glm::radians(90.0f)), target(State::CLOSE), lastTime(static_cast<float>(glfwGetTime())), v(1.0) {
+        : up(up), down(down), state(State::CLOSE), angle(glm::radians(90.0f)), target(State::CLOSE), lastTime(static_cast<float>(glfwGetTime())), v(1.0), enable(true){
     }
     void draw(const glm::mat4 &model, const glm::mat4 &view, const glm::mat4 &projection) override;
     void setTarget(State target);
     ChestState getState() const;
+    bool setEnable(bool en);
 };
 
 

@@ -6,7 +6,7 @@
 #include "sha256.h"
 #include <string>
 #include <vector>
-namespace game {
+namespace guess {
     using Clue = std::vector<int>;
 
     class PuzzleSolver {
@@ -19,6 +19,8 @@ namespace game {
         // 新增：从 JSON 文件中加载数据（封装）
         static std::pair<std::string, std::vector<Clue>> loadPuzzleData(const std::string &filename);
 
+        static std::string sha256(const std::string &input);
+
     private:
         std::string targetHash;
         std::vector<Clue> clues;
@@ -27,7 +29,6 @@ namespace game {
 
         bool isPrime(int n);
 
-        std::string sha256(const std::string &input);
 
         bool backtrack(std::vector<int> &password, int index);
     };
