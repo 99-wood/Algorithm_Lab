@@ -5,6 +5,7 @@
 #include "cube.h"
 unsigned Cube::VBO = 0;
 unsigned Cube::EBO = 0;
+unsigned Cube::VAO = 0;
 int Cube::modelLoc = 0, Cube::viewLoc = 0, Cube::projectionLoc = 0;
 bool Cube::INITED = false;
 Shader *Cube::shader = nullptr;
@@ -70,6 +71,9 @@ void Cube::init(const char *vertexPath, const char *fragmentPath) {
         // 下面
         20, 21, 22, 22, 23, 20
     };
+    glGenVertexArrays(1, const_cast<unsigned int*>(&VAO));
+    glBindVertexArray(VAO);
+
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
@@ -77,6 +81,13 @@ void Cube::init(const char *vertexPath, const char *fragmentPath) {
     glGenBuffers(1, &EBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), static_cast<void *>(nullptr));
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), reinterpret_cast<void *>(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), reinterpret_cast<void *>(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
     INITED = true;
 }
 

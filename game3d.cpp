@@ -86,6 +86,17 @@ void processInput(GLFWwindow *window, PlayerController *controller) {
     }
 }
 
+glm::mat4 billboard(const glm::vec3 &position, const glm::mat4 &view) {
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, position);
+
+    // 去掉 view 矩阵的平移部分（只保留旋转）
+    glm::mat4 rotationOnly = glm::mat4(glm::mat3(view));
+    model *= glm::transpose(rotationOnly); // 反向旋转（billboard）
+
+    return model;
+}
+
 GLFWwindow *window;
 
 void init() {
@@ -117,6 +128,9 @@ void init() {
 
     Cube::init();
     Slime::init();
+    HealthBar::init();
+    ch::load();
+    ch::init(screenWidth, screenHeight);
 }
 
 using Maze = maze::Maze;
@@ -126,8 +140,6 @@ enum class State {
 };
 int main() {
     init();
-    ch::load();
-    ch::init(screenWidth, screenHeight);
     // OpenGL setting
     {
         glEnable(GL_DEPTH_TEST);
@@ -170,6 +182,7 @@ int main() {
     const Cube chestDownCube(&chestDownFrontTexture, &chestDownSideTexture, &chestDownSideTexture, &chestDownSideTexture, nullptr, &chestTopTexture);
     Chest chest(&chestUpCube, &chestDownCube);
     const Slime slimeCube(&slimeTexture);
+    HealthBar hpBar(1.0f);
     Player player(&headCube, &bodyCube, &armCube, &armCube, &legCube, &legCube);
 
     std::cout << "Start Guess Test" << std::endl;
@@ -332,6 +345,9 @@ int main() {
                     std::getline(ss, info);
                     messageL.push_back(info);
                     if(*bossIt == 0) ++bossIt;
+                    if(bossIt != currentBossHps.end()){
+                        hpBar.setHealth(1.0f * (*bossIt) / bossHPs[bossIt - currentBossHps.begin()]);
+                    }
                     currentSkills[*skillIt].cooldown = skills[*skillIt].cooldown + 1;
                     ++skillIt;
                 }
@@ -419,6 +435,10 @@ int main() {
                     model = glm::scale(model, glm::vec3(0.7f, 0.7f, 0.7f));
                     model = glm::translate(model, glm::vec3(0, 1.3f, 0));
                     slimeCube.draw(model, view, projection);
+
+                    glm::mat4 barModel = billboard(glm::vec3(j, 2.0f, i), view);
+                    barModel = glm::scale(barModel, glm::vec3(1.5f, 0.2f, 1.0f)); // 血条尺寸
+                    hpBar.draw(barModel, view, projection);
                 }
                 else{
                     std::cerr << maze[i][j].nodeType;
