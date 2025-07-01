@@ -348,6 +348,9 @@ int main() {
                     if(bossIt != currentBossHps.end()){
                         hpBar.setHealth(1.0f * (*bossIt) / bossHPs[bossIt - currentBossHps.begin()]);
                     }
+                    else{
+                        hpBar.setHealth(0);
+                    }
                     currentSkills[*skillIt].cooldown = skills[*skillIt].cooldown + 1;
                     ++skillIt;
                 }
