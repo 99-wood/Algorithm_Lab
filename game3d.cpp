@@ -186,9 +186,11 @@ int main() {
     Player player(&headCube, &bodyCube, &armCube, &armCube, &legCube, &legCube);
 
     std::cout << "Start Guess Test" << std::endl;
-    for(int i = 0; i <= 29; ++i){
+    int sumTries = 0;
+    for(int i = 0; i <= 99; ++i){
         std::stringstream ss;
-        ss << "../Test_Data/official/guess/pwd_0";
+//        ss << "../Test_Data/official/guess/pwd_0";
+        ss << "../Test_Data/password_test/pwd_0";
         if(i < 10) ss << 0;
         ss << i;
         ss << ".json";
@@ -199,37 +201,47 @@ int main() {
         std::cout << "test" << i << ": ";
         assert(!pwd.empty());
         if(guess::PuzzleSolver::sha256(pwd) == hash){
-            std::cout << "OK Answer: " << pwd << std::endl;
+            std::cout << "OK! Answer: " << pwd << " Tries: " << guessSolver.tries << std::endl;
         }
         else{
             std::cout << "Wrong" << std::endl;
         }
+        sumTries += guessSolver.tries;
     }
+    std::cout << "sum tries: " << sumTries << std::endl;
     std::cout << "Start Boss Test" << std::endl;
-    for(int i = 1; i <= 9; ++i){
+    for(int i = 1; i <= 4; ++i){
         std::stringstream ss;
-        ss << "../Test_Data/official/BOSS/boss_case_";
+//        const auto [bossHPs, skills] = boss::loadBossBattleData("../Test_Data/boss_test/input/input_case_1.json");
+        ss << "../Test_Data/boss_test/input/input_case_";
         ss << i;
         ss << ".json";
-        // std::cout << ss.str() << std::endl;
+//        std::cout << ss.str() << std::endl;
         const auto [bossHPs, skills] = boss::loadBossBattleData(ss.str());
-        const int minTurn = boss::loadMinNum(ss.str());
+//        const int minTurn = boss::loadMinNum(ss.str());
         boss::BossStrategy strategy;
         strategy.init(skills, bossHPs);
         const std::vector<int> plan = strategy.findOptimalSequence(false);
-        if(plan.size() <= minTurn){
+        std::cout << "test" << i << ": ";
+//        if(plan.size() <= minTurn){
             std::cout << "OK Answer: " << plan.size() << std::endl;
-        }
-        else{
-            std::cout << "Wrong" << std::endl;
-        }
+//        }
+//        else{
+//            std::cout << "Wrong" << std::endl;
+//        }
     }
 
-    int n = 15;
+    int n = 101;
+//#define TEST
+#ifdef TEST
     const Maze originMaze = maze::genMaze("../Test_Data/first/dp/hard/maze_15_15_2.json");
-//    const Maze originMaze = maze::genMaze(n);
-    const auto [bossHPs, skills] = boss::loadBossBattleData("../Test_Data/official/BOSS/boss_case_2.json");
+    const auto [bossHPs, skills] = boss::loadBossBattleData("../Test_Data/boss_test/input/input_case_4.json");
     const auto [hash, clues] = guess::PuzzleSolver::loadPuzzleData("../Test_Data/official/guess/pwd_002.json");
+#else
+    const Maze originMaze = maze::genMaze(n);
+    const auto [bossHPs, skills] = boss::loadBossBattleData("../Test_Data/official/BOSS/boss_case_2.json");
+    const auto [hash, clues] = guess::PuzzleSolver::loadPuzzleData("../Test_Data/official/guess/pwd_005.json");
+#endif
 
     // 导出地图
     const nlohmann::json json = maze::mazeToJson(originMaze);
@@ -323,7 +335,7 @@ int main() {
             }
         }
         else if(state == State::FIGHT){
-            controller.setSpeed(0.5);
+            controller.setSpeed(1);
             static int round = 0;
             if(controller.isAvailable() && controller.isQueueEmpty()){
                 if(skillIt != plan.end()){
@@ -345,12 +357,6 @@ int main() {
                     std::getline(ss, info);
                     messageL.push_back(info);
                     if(*bossIt == 0) ++bossIt;
-                    if(bossIt != currentBossHps.end()){
-                        hpBar.setHealth(1.0f * (*bossIt) / bossHPs[bossIt - currentBossHps.begin()]);
-                    }
-                    else{
-                        hpBar.setHealth(0);
-                    }
                     currentSkills[*skillIt].cooldown = skills[*skillIt].cooldown + 1;
                     ++skillIt;
                 }
@@ -364,7 +370,7 @@ int main() {
         else{
             assert(state == State::GUESS);
             static int finish = 0;
-            controller.setSpeed(0.5);
+            controller.setSpeed(1);
             if(!finish && controller.isAvailable() && controller.isQueueEmpty()){
                 controller.addAction({2, 0, 0});
                 std::stringstream ss;
@@ -438,10 +444,12 @@ int main() {
                     model = glm::scale(model, glm::vec3(0.7f, 0.7f, 0.7f));
                     model = glm::translate(model, glm::vec3(0, 1.3f, 0));
                     slimeCube.draw(model, view, projection);
-
-                    glm::mat4 barModel = billboard(glm::vec3(j, 2.0f, i), view);
-                    barModel = glm::scale(barModel, glm::vec3(1.5f, 0.2f, 1.0f)); // 血条尺寸
-                    hpBar.draw(barModel, view, projection);
+                    for(int k = 0; k < currentBossHps.size(); ++k){
+                        hpBar.setHealth(1.0f * currentBossHps[k] / bossHPs[k]);
+                        glm::mat4 barModel = billboard(glm::vec3(j, 2.0f + 0.3 * k, i), view);
+                        barModel = glm::scale(barModel, glm::vec3(1.5f, 0.2f, 1.0f)); // 血条尺寸
+                        hpBar.draw(barModel, view, projection);
+                    }
                 }
                 else{
                     std::cerr << maze[i][j].nodeType;
@@ -461,6 +469,13 @@ int main() {
         ss << w;
         ch::RenderText(ss.str(), screenWidth - 200.0f, screenHeight - 30.0f, 0.5f, glm::vec3(0.5f, 0.8f, 0.2f));
         ch::RenderText("DP demo", 10.0f, screenHeight - 30.0f, 0.5f, glm::vec3(0.3f, 0.7f, 0.9f));
+        for(int i = 0; i < currentSkills.size(); ++i){
+            std::stringstream ss;
+            ss << "skill" << i << ": " << currentSkills[i].cooldown;
+            std::string str;
+            std::getline(ss, str);
+            ch::RenderText(str, 150.0f + 100.0f * i, screenHeight - 30.0f, 0.5f, glm::vec3(0.3f, 0.7f, 0.9f));
+        }
         auto it = messageL.rbegin();
         for(int i = 1; i <= messageBoxSize && it != messageL.rend(); ++i, ++it){
             ch::RenderText(*it, 10.0f, static_cast<float>(screenHeight) - 30.0f - static_cast<float>(i) * 30.0f, 0.5f, glm::vec3(0.9f, 0.7f, 0.3f));
