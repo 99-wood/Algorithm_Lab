@@ -21,8 +21,10 @@
 #include "chest.h"
 #include "dp.h"
 #include "maze.h"
+#include "maze_navigator.h"
 #include "puzzle_solver.h"
 #include "slime.h"
+#include "SmartRunner.h"
 constexpr int screenWidth = 1920, screenHeight = 1080;
 constexpr int messageBoxSize = 10;
 
@@ -184,7 +186,7 @@ int main() {
     const Slime slimeCube(&slimeTexture);
     HealthBar hpBar(1.0f);
     Player player(&headCube, &bodyCube, &armCube, &armCube, &legCube, &legCube);
-
+#ifdef TEST_ALL
     std::cout << "Start Guess Test" << std::endl;
     int sumTries = 0;
     for(int i = 0; i <= 99; ++i){
@@ -230,11 +232,15 @@ int main() {
 //            std::cout << "Wrong" << std::endl;
 //        }
     }
+#endif
 
-    int n = 101;
-#define TEST
-#ifdef TEST
-    const Maze originMaze = maze::genMaze("../Test_Data/first/dp/hard/maze_15_15_2.json");
+    int n = 15;
+// #define OFFICIAL_TEST
+// #define SHOW_DP
+// #define SHOW_GREEDY
+#define SHOW_SMART
+#ifdef OFFICIAL_TEST
+    const Maze originMaze = maze::genMaze("../last_maze.json");
     const auto [bossHPs, skills] = boss::loadBossBattleData("../Test_Data/boss_test/input/input_case_4.json");
     const auto [hash, clues] = guess::PuzzleSolver::loadPuzzleData("../Test_Data/official/guess/pwd_002.json");
 #else
@@ -244,22 +250,44 @@ int main() {
 #endif
 
     // 导出地图
-    const nlohmann::json json = maze::mazeToJson(originMaze);
-    maze::printJson(json, "../Test_Data/first/maze2.json");
-
+    // const nlohmann::json json = maze::mazeToJson(originMaze);
+    // maze::printJson(json, "../Test_Data/first/maze2.json");
+#ifdef SHOW_DP
     // DP 计算路径
-    auto maze = originMaze;
-    n = static_cast<int>(originMaze.size());
+    std::cout << "-----------------DP-----------------" << std::endl;
     dp::DP dpRuner(originMaze);
     dpRuner.run();
     const auto path = dpRuner.getPath();
     const auto W = dpRuner.getValue();
+    std::cout << "DP value: " << W - maze::BVAL - maze::LVAL << std::endl;
+    std::cout << "DP path size: " << path.size() << std::endl;
+#endif
+#ifdef SHOW_GREEDY
+    // 贪心计算路径
+    std::cout << "---------------GREEDY---------------" << std::endl;
+    MazeNavigator greedyRunner(originMaze);
+    const auto [path, W] = greedyRunner.findPath();
+    std::cout << "greedy value: " << W - maze::BVAL - maze::LVAL << std::endl;
+    std::cout << "greedy path size: " << path.size() << std::endl;
+#endif
+#ifdef SHOW_SMART
+    // 启发式计算路径
+    std::cout << "---------------SMART---------------" << std::endl;
+    smart::SmartRunner smartRunner(originMaze);
+    smartRunner.run();
+    const auto path = smartRunner.getPath();
+    const int W = smartRunner.getW();
+    std::cout << "greedy value: " << W - maze::BVAL - maze::LVAL << std::endl;
+    std::cout << "greedy path size: " << path.size() << std::endl;
+#endif
 
     // 计算 BOSS
+    std::cout << "-----------------BOSS-----------------" << std::endl;
     boss::BossStrategy strategy;
     strategy.init(skills, bossHPs);
-    std::cout << " Executing Branch and Bound...\n";
+    // std::cout << " Executing Branch and Bound...\n";
     const std::vector<int> plan = strategy.findOptimalSequence(false);
+    std::cout << "plan: ";
     for(auto x : plan){
         std::cout << x << " ";
     }
@@ -272,17 +300,21 @@ int main() {
         cooldown = 0;
     }
 
+    std::cout << "-----------------GUESS-----------------" << std::endl;
     // 猜
     guess::PuzzleSolver guessSolver(hash, clues);
     guessSolver.solve();
     const std::string pwd = guessSolver.ans;
     const int guessTries = guessSolver.tries;
 
+    auto maze = originMaze;
+    n = static_cast<int>(originMaze.size());
+
     State state = State::WALK;
     std::vector<std::string> messageL;
     std::vector<std::string> messageR;
 
-    std::cout << "value: " << W % maze::BVAL << std::endl;
+    std::cout << "expect value: " << W - maze::BVAL - maze::LVAL - plan.size() - guessTries << std::endl;
     std::vector see(n, std::vector(n, false));
     std::vector vis(n, std::vector(n, false));
     auto pathIt = path.begin();
@@ -340,10 +372,10 @@ int main() {
             if(controller.isAvailable() && controller.isQueueEmpty()){
                 if(skillIt != plan.end()){
                     ++round;
+                    --w;
                     for(auto &[id, damage, cooldown] : currentSkills){
                         cooldown -= std::min(1, cooldown);
                     }
-                    std::cout << std::endl;
                     controller.addAction({2, 0, 0});
                     assert(bossIt != currentBossHps.end());
                     if(currentSkills[*skillIt].cooldown > 0){
@@ -489,7 +521,7 @@ int main() {
         glfwPollEvents();
     }
 
-
     glfwTerminate();
+    // assert(W - maze::BVAL - maze::LVAL - plan.size() - guessTries == w);
     return 0;
 }

@@ -11,7 +11,7 @@ include_directories("./include")
 #find_package(Freetype REQUIRED CONFIG)
 add_subdirectory("./freetype/freetype-2.13.3")
 
-add_executable(maze_game main.cpp
+add_executable(test_bench test_bench.cpp
         maze.cpp
         maze.h
         dp.cpp
@@ -22,7 +22,9 @@ add_executable(maze_game main.cpp
         puzzle_solver.cpp
         boss_strategy.h
         boss_strategy.cpp
-        maze_navigator.cpp)
+        maze_navigator.cpp
+        SmartRunner.cpp
+        SmartRunner.h)
 
 add_executable(sha256test sha256_test.c
         sha256.h
@@ -63,7 +65,11 @@ add_executable(game3d game3d.cpp
         puzzle_solver.cpp
         puzzle_solver.h
         sha256.h
-        sha256.c)
+        sha256.c
+        maze_navigator.h
+        maze_navigator.cpp
+        SmartRunner.cpp
+        SmartRunner.h)
 link_directories(${PROJECT_SOURCE_DIR}/lib)
 target_link_libraries(game3d PRIVATE
         ${CMAKE_SOURCE_DIR}/lib/libglfw3dll.a

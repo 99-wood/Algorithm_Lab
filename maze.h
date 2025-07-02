@@ -23,14 +23,15 @@ namespace maze {
     using std::vector;
     using std::pair;
     enum class NodeType {
-        G,//金币
-        S,//起点
-        E,//出口
-        W,//墙壁
-        R,//通路
-        T,//陷阱
-        L,//机关
-        B //Boss
+        G, // 金币
+        S, // 起点
+        E, // 出口
+        W, // 墙壁
+        R, // 通路
+        T, // 陷阱
+        L, // 机关
+        B, // Boss
+        U  // Unknown
     };
 
     inline NodeType stringToNodeType(const std::string &str) {
@@ -42,6 +43,7 @@ namespace maze {
         if (str == "T") return NodeType::T;
         if (str == "L") return NodeType::L;
         if (str == "B") return NodeType::B;
+        if (str == "U") return NodeType::U;
         assert(0);
     }
 
@@ -63,6 +65,8 @@ namespace maze {
                 return os << 'L';
             case NodeType::B:
                 return os << 'B';
+            case NodeType::U:
+                return os << 'U';
             default:
                 assert(0);
         }
