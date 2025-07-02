@@ -232,7 +232,7 @@ int main() {
     }
 
     int n = 101;
-//#define TEST
+#define TEST
 #ifdef TEST
     const Maze originMaze = maze::genMaze("../Test_Data/first/dp/hard/maze_15_15_2.json");
     const auto [bossHPs, skills] = boss::loadBossBattleData("../Test_Data/boss_test/input/input_case_4.json");
