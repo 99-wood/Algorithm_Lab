@@ -21,10 +21,10 @@
 #include "chest.h"
 #include "dp.h"
 #include "maze.h"
-#include "maze_navigator.h"
 #include "puzzle_solver.h"
 #include "slime.h"
 #include "SmartRunner.h"
+#include "GreedyRunner.h"
 constexpr int screenWidth = 1920, screenHeight = 1080;
 constexpr int messageBoxSize = 10;
 
@@ -237,8 +237,8 @@ int main() {
     int n = 15;
  #define OFFICIAL_TEST
 // #define SHOW_DP
-// #define SHOW_GREEDY
-#define SHOW_SMART
+#define SHOW_GREEDY
+// #define SHOW_SMART
 #ifdef OFFICIAL_TEST
     const Maze originMaze = maze::genMaze("../Test_Data/last/1_maze_15_15.json");
     const auto [bossHPs, skills] = boss::loadBossBattleData("../Test_Data/last/1_maze_15_15.json");
@@ -265,8 +265,10 @@ int main() {
 #ifdef SHOW_GREEDY
     // 贪心计算路径
     std::cout << "---------------GREEDY---------------" << std::endl;
-    MazeNavigator greedyRunner(originMaze);
-    const auto [path, W] = greedyRunner.findPath();
+    greedy::GreedyRunner greedyRunner(originMaze);
+    greedyRunner.run();
+    const auto path = greedyRunner.getPath();
+    const int W = greedyRunner.getW();
     std::cout << "greedy value: " << W - maze::BVAL - maze::LVAL << std::endl;
     std::cout << "greedy path size: " << path.size() << std::endl;
 #endif

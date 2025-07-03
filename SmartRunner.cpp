@@ -166,7 +166,13 @@ namespace smart{
                 if(currentMaze[u][v].nodeType == maze::NodeType::T) wu = getExpect(u, v);
                 return wx < wu;
             }
-            else return std::abs(p - x) + std::abs(q - y) > std::abs(u - x) + std::abs(v - y);
+            else{
+                // return std::abs(p - x) + std::abs(q - y) > std::abs(u - x) + std::abs(v - y);
+                std::deque<std::pair<int, int>> px, pu;
+                genPath(x, y, p, q, px);
+                genPath(x, y, u, v, pu);
+                return px.size() > pu.size();
+            }
         };
         while(!q.empty()){
             int tx = -1, ty = -1;

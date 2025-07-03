@@ -3,7 +3,8 @@
 #include "dp.h"
 #include "puzzle_solver.h"
 #include "boss_strategy.h"
-#include "maze_navigator.h"
+// #include "maze_navigator.h"
+#include "GreedyRunner.h"
 #include "SmartRunner.h"
 
 using Json = nlohmann::json;
@@ -25,9 +26,13 @@ int getPathVal(const std::vector<std::pair<int, int>> &path, const Maze &maze) {
 void printPath(const std::vector<std::pair<int, int>> &path, const Maze &maze){
     const int n = maze.size();
     vector vis(n, vector(n, 0));
+    int lastx, lasty;
     for (const auto [x, y]: path) {
         vis[x][y] = true;
+        lastx = x;
+        lasty = y;
     }
+    assert(maze[lastx][lasty].nodeType == maze::NodeType::E);
     for(int i = 0; i < n; ++i){
         for(int j = 0; j < n; ++j){
             if(vis[i][j]) std::cout << "@ ";
@@ -68,8 +73,9 @@ bool solve() {
         std::cout << "can not match password" << std::endl;
 #endif
 
-    int n = 11, w = 0;
-    const Maze maze = maze::genMaze("../Test_Data/last/1_maze_15_15.json");
+    int n = 15, w = 0;
+    // const Maze maze = maze::genMaze("../Test_Data/last/1_maze_15_15.json");
+    const Maze maze = maze::genMaze(n);
     const Json json = mazeToJson(maze);
     maze::printJson(json, "../Test_Data/first/maze2.json");
     n = maze.size();
@@ -83,10 +89,19 @@ bool solve() {
     sumDPVal += w;
     cout << "------------------------------------------------------------------" << endl;
 
-    MazeNavigator greedyRunner(maze);
-    auto [greedyPath, greedyW] = greedyRunner.findPath();
+    // MazeNavigator greedyRunner(maze);
+    // auto [greedyPath, greedyW] = greedyRunner.findPath();
+    // w = getPathVal(greedyPath, maze);
+    // std::cout << w << " " << greedyW - maze::BVAL - maze::LVAL << std::endl;
+    // // assert(w == greedyW - maze::BVAL - maze::LVAL);
+    // printPath(greedyPath, maze);
+    // cout << "greedy value: "<< w << endl;
+    // sumGreedyVal += w;
+    greedy::GreedyRunner greedyRunner(maze);
+    greedyRunner.run();
+    const auto greedyPath = greedyRunner.getPath();
     w = getPathVal(greedyPath, maze);
-    assert(w == greedyW - maze::BVAL - maze::LVAL);
+    assert(w == greedyRunner.getW() - maze::BVAL - maze::LVAL);
     printPath(greedyPath, maze);
     cout << "greedy value: "<< w << endl;
     sumGreedyVal += w;
@@ -105,7 +120,7 @@ bool solve() {
     return true;
 }
 int main() {
-    constexpr int t = 1;
+    constexpr int t = 100;
     for(int i = 0; i < t; ++i) solve();
     std::cout <<  "sum DP value: " << sumDPVal << " " << " average: " << 1.0 * sumDPVal / t << std::endl;
     std::cout <<  "sum greedy value: " << sumGreedyVal << " average: " << 1.0 * sumGreedyVal / t << std::endl;
