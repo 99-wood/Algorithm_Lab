@@ -22,6 +22,21 @@ int getPathVal(const std::vector<std::pair<int, int>> &path, const Maze &maze) {
     w -= maze::LVAL;
     return w;
 }
+void printPath(const std::vector<std::pair<int, int>> &path, const Maze &maze){
+    const int n = maze.size();
+    vector vis(n, vector(n, 0));
+    for (const auto [x, y]: path) {
+        vis[x][y] = true;
+    }
+    for(int i = 0; i < n; ++i){
+        for(int j = 0; j < n; ++j){
+            if(vis[i][j]) std::cout << "@ ";
+            else std::cout << maze[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+    return;
+}
 
 int sumDPVal = 0, sumGreedyVal = 0, sumSmartVal = 0;
 // #define RUN_BOSS
@@ -54,24 +69,16 @@ bool solve() {
 #endif
 
     int n = 11, w = 0;
-    const Maze maze = maze::genMaze(n);
+    const Maze maze = maze::genMaze("../Test_Data/last/1_maze_15_15.json");
     const Json json = mazeToJson(maze);
     maze::printJson(json, "../Test_Data/first/maze2.json");
     n = maze.size();
-    // for (const auto &row: maze) {
-    //     cout << '[';
-    //     for (const auto &x: row) {
-    //         cout << "\"";
-    //         cout << x << ", " << x.value << "\", ";
-    //     }
-    //     cout << "]";
-    //     cout << endl;
-    // }
     dp::DP dpRuner(maze);
     dpRuner.run();
     const auto dpPath = dpRuner.getPath();
     w = getPathVal(dpPath, maze);
     assert(w == dpRuner.getValue() - maze::BVAL - maze::LVAL);
+    printPath(dpPath, maze);
     cout << "DP value: "<< w << endl;
     sumDPVal += w;
     cout << "------------------------------------------------------------------" << endl;
@@ -80,6 +87,7 @@ bool solve() {
     auto [greedyPath, greedyW] = greedyRunner.findPath();
     w = getPathVal(greedyPath, maze);
     assert(w == greedyW - maze::BVAL - maze::LVAL);
+    printPath(greedyPath, maze);
     cout << "greedy value: "<< w << endl;
     sumGreedyVal += w;
     cout << "------------------------------------------------------------------" << endl;
@@ -89,14 +97,15 @@ bool solve() {
     const auto smartPath = smartRunner.getPath();
     w = getPathVal(smartPath, maze);
     assert(w == smartRunner.getW() - maze::BVAL - maze::LVAL);
+    printPath(smartPath, maze);
     cout << "smart value: "<< w << endl;
     sumSmartVal += w;
-    // std::cout << "greedy path size: " << path.size() << std::endl;
+
     cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||" << endl;
     return true;
 }
 int main() {
-    constexpr int t = 200;
+    constexpr int t = 1;
     for(int i = 0; i < t; ++i) solve();
     std::cout <<  "sum DP value: " << sumDPVal << " " << " average: " << 1.0 * sumDPVal / t << std::endl;
     std::cout <<  "sum greedy value: " << sumGreedyVal << " average: " << 1.0 * sumGreedyVal / t << std::endl;

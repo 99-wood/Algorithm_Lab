@@ -235,14 +235,14 @@ int main() {
 #endif
 
     int n = 15;
-// #define OFFICIAL_TEST
+ #define OFFICIAL_TEST
 // #define SHOW_DP
 // #define SHOW_GREEDY
 #define SHOW_SMART
 #ifdef OFFICIAL_TEST
-    const Maze originMaze = maze::genMaze("../last_maze.json");
-    const auto [bossHPs, skills] = boss::loadBossBattleData("../Test_Data/boss_test/input/input_case_4.json");
-    const auto [hash, clues] = guess::PuzzleSolver::loadPuzzleData("../Test_Data/official/guess/pwd_002.json");
+    const Maze originMaze = maze::genMaze("../Test_Data/last/1_maze_15_15.json");
+    const auto [bossHPs, skills] = boss::loadBossBattleData("../Test_Data/last/1_maze_15_15.json");
+    const auto [hash, clues] = guess::PuzzleSolver::loadPuzzleData("../Test_Data/last/1_maze_15_15.json");
 #else
     const Maze originMaze = maze::genMaze(n);
     const auto [bossHPs, skills] = boss::loadBossBattleData("../Test_Data/official/BOSS/boss_case_2.json");
