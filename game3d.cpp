@@ -237,8 +237,8 @@ int main() {
     int n = 15;
  #define OFFICIAL_TEST
 // #define SHOW_DP
-#define SHOW_GREEDY
-// #define SHOW_SMART
+//#define SHOW_GREEDY
+ #define SHOW_SMART
 #ifdef OFFICIAL_TEST
     const Maze originMaze = maze::genMaze("../Test_Data/last/1_maze_15_15.json");
     const auto [bossHPs, skills] = boss::loadBossBattleData("../Test_Data/last/1_maze_15_15.json");
