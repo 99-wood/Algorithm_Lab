@@ -282,7 +282,7 @@ maze generation; tree-based DP; greedy strategy; heuristic strategy; backtrackin
 
 随机选择一个纵向墙体 (非外围) 和一个横向墙体 (非外围), 视其把迷宫分割为四个部分作为其子问题并求解,
 同时在四片墙体中随机选取三个墙体将其打通, 由于~$2 \times 2$ 迷宫的特殊性,
-这样生成的迷宫路径唯一且无环路, 且无需合并子问题。
+这样生成的迷宫路径唯一且无环路, 且无需合并子问题$^{[1]}$.
 
 \begin{CJK*}{UTF8}{zhhei}{4. 设置入口和出口}\end{CJK*}
 
@@ -316,8 +316,8 @@ T(A,B) &= \mathcal{O}(1) + T(p,q) + T(p,B-q) + {} \\
        &\quad + T(A-p,q) + T(A-p,B-q) \\
        &= \mathcal{O}(1) + \mathcal{O}(p \times q) + \mathcal{O}(p \times (B - q)) + {} \\
        &\quad + \mathcal{O}((A - p) \times q) + \mathcal{O}((A - p) \times (B - q)) \\
-       &= \mathcal{O}(A \times B)
-\end{align*}.
+       &= \mathcal{O}(A \times B).
+\end{align*}
 
 
 所以, 规模为~$a \times b$~的问题的时间复杂度是~$\mathcal{O}(a \times b)$.
@@ -356,16 +356,16 @@ T(A,B) &= \mathcal{O}(1) + T(p,q) + T(p,B-q) + {} \\
 
 目标: 从迷宫的起点出发, 到达终点, 经过必须经过的机关和~BOSS, 收集最多的资源.
 
-分析: 地图保证了路径唯一, 可知地图实际是一个树形结构, 可以采用树形 DP.
+分析: 地图保证了路径唯一, 可知地图实际是一个树形结构, 可以采用树形~DP$^{[5]}$.
 我们以起点为根, 构建地图对应的树.
-问题就转化为了有一颗带权树, 要求找一条从根到终点的通路, 使得通路上的权值和最大.
+问题就转化为了有一颗带权树, 要求找一条从根到终点的通路, 使得通路上的权值和最大$^{[2]}$.
 
 
 \begin{CJK*}{UTF8}{zhhei}\subsection{状态设计及状态转移方程}\end{CJK*}
 
 定义~$\textrm{dp}_{i, j}$~表示从点~$(i,j)$~出发能获得的最大价值,
 $\textrm{must}_{i,j}$~表示点~$(i,j)$~是否为从起点到终点必须经过的点.
-那么答案即为~$\textrm{dp}_s$, 其中~$s$~为起点的坐标。
+那么答案即为~$\textrm{dp}_s$, 其中~$s$~为起点的坐标.
 那么有转移方程：
 
 \begin{align*}
@@ -417,10 +417,10 @@ $\textrm{must}_{i,j}$~表示点~$(i,j)$~是否为从起点到终点必须经过�
 
 本算法采用自底向上的树形动态规划方法,
 其中每个点~$p$~只会在其父节点的转移中被访问一次,
-而~$\textrm{must}$~的计算也是在一次~DFS~遍历中完成的。
+而~$\textrm{must}$~的计算也是在一次~DFS~遍历中完成的.
 
 首先, 自底向上计算每个点是否为必须经过的点, 即~$\textrm{must}_p$.
-该过程为一次~DFS, 遍历所有点与边, 时间复杂度为~$\mathcal{O}(n)$。
+该过程为一次~DFS, 遍历所有点与边, 时间复杂度为~$\mathcal{O}(n)$.
 
 接下来计算每个点的~$\textrm{dp}_p$,
 其依赖于所有子节点的~$\textrm{dp}_x$.
@@ -432,7 +432,7 @@ $\textrm{must}_{i,j}$~表示点~$(i,j)$~是否为从起点到终点必须经过�
 \]
 
 该算法空间复杂度也为~$\mathcal{O}(n)$,
-用于记录每个点的~$\textrm{dp}$~和~$\textrm{must}$~状态。
+用于记录每个点的~$\textrm{dp}$~和~$\textrm{must}$~状态.
 
 \begin{CJK*}{UTF8}{zhhei}\subsection{伪代码}\end{CJK*}
 
@@ -560,7 +560,7 @@ $$
 \begin{CJK*}{UTF8}{zhhei}\subsection{复杂度分析}\end{CJK*}
 
 在最坏情况下, 可能需要探索整个地图遍历所有~$n^2$~个格子.
-每次寻找当前最高优先级的目标, 但是由于现在的优先级是实时更新的，不可以用大根堆,
+每次寻找当前最高优先级的目标, 但是由于现在的优先级是实时更新的,不可以用大根堆,
 所以取得一次最高优先级的元素复杂度为~$\mathcal{O}(n^2)$.
 所以总的时间复杂度为~$\mathcal{O}(n^4)$.
     
@@ -585,6 +585,12 @@ $$
 \label{tab1}
 \end{center}
 \end{table}
+DP 得分最高: 由于拥有全图信息, 它能保证路径最优;
+
+贪心策略表现最差: 虽快速但容易落入局部最优;
+
+启发式方法综合表现优秀: 仅凭有限视野,
+得分接近全图最优解,展现出“预期收益评估~+~策略优先级”的强大决策能力.
 
 \end{CJK*}
 
@@ -601,11 +607,142 @@ $$
 
 输入: 一个~$3$~位密码锁的位置和线索 (如每位密码为素数且不重复、或第~$1$~位是偶数等)
 
-输出：密码
+输出: 密码
+
+\begin{CJK*}{UTF8}{zhhei}\subsection{回溯法与剪枝策略}\end{CJK*}
+
+本算法使用回溯法穷举所有三位密码组合,
+并通过线索进行剪枝优化, 显著减少无效搜索空间$^{[3]}$.
+
+剪枝函数判断当前构造出的密码是否满足全部线索条件:
+\begin{itemize}
+  \item 若线索为 \texttt{[-1, -1]}, 表示密码需为三位不同的素数;
+  \item 若线索长度为 $2$, 如~\texttt{[1, 0]}~表示第~$1$~位必须为偶数;
+  \item 若线索长度为 $3$, 如~\texttt{[5, -1, 3]}, 表示第~$1$~位为~$5$, 第~$3$~位为~$3$.
+\end{itemize}
+
+在回溯函数中, 每填一位数字即调用剪枝函数, 避免无效状态扩展.
+
+
+\begin{CJK*}{UTF8}{zhhei}\subsection{复杂度分析}\end{CJK*}
+
+最坏情况下, 尝试所有~$10^3 = 1000$~个三位数,
+但在有效剪枝下, 实际遍历节点数远小于~$1000$, 记为~$T$.
+
+对于每个状态调用一次剪枝函数, 每次最多遍历~$|C|$~条线索, 故总复杂度为:
+
+\[
+\mathcal{O}(T \cdot |C|)
+\]
+
+其中~$|C|$~为线索数, $T$ 通常远小于~$1000$.
 
 \end{CJK*}
 
 
+% @分支限界法
+\begin{CJK*}{UTF8}{zhhei}
+\zihao{5}
+\vskip 1mm
+\section{分支限界法优化~BOSS~战斗策略}
+\end{CJK*}
+
+\begin{CJK*}{UTF8}{song}
+\begin{CJK*}{UTF8}{zhhei}\subsection{问题描述}\end{CJK*}
+
+任务: 在限定回合内击败~BOSS, 寻找最小代价的技能序列.
+
+输入: 玩家剩余资源、BOSS~血量、玩家可用技能 (例如, 普通攻击: 伤害5、无冷却; 
+大招: 伤害10, 冷却2回合).
+
+输出: 最小回合数的技能序列.
+
+\begin{CJK*}{UTF8}{zhhei}\subsection{分支限界法与剪枝策略}\end{CJK*}
+
+本策略用于规划击败多个~BOSS~的最优技能施放序列$^{[4]}$,
+采用分支限界~(Branch and Bound)~法进行搜索.
+每个状态包括：
+
+\begin{itemize}
+  \item 当前~BOSS~的血量数组;
+  \item 当前正在攻击的~BOSS~编号;
+  \item 当前时间步数~(回合);
+  \item 各技能冷却状态;
+  \item 技能使用历史序列.
+\end{itemize}
+
+通过启发式函数~\texttt{lowerBound}~
+估计当前状态的最优代价下界~$bound = \texttt{turn} + \texttt{lowerBound}$,
+若该值不优于当前最优解则立即剪枝. 
+估价函数如下: 
+
+\[
+\texttt{lowerBound} = \left\lceil \frac{\text{剩余所有~BOSS~总血量}}{\text{平均每回合伤害}} \right\rceil
+\]
+
+同时, 为避免状态重复, 使用哈希函数记录已访问状态~\texttt{hashState},
+并通过集合去重.
+
+
+\begin{CJK*}{UTF8}{zhhei}\subsection{复杂度分析}\end{CJK*}
+
+设~BOSS~数量为~$n$, 技能数量为~$k$, 最大每个~BOSS~血量为~$H$.
+
+最坏情况下, 每一步可以选择~$k$~个技能或跳过, 最多打掉 $nH$ 点血, 理论状态空间为:
+
+\[
+\mathcal{O}(k^{nH}).
+\]
+
+但由于: 
+
+\begin{itemize}
+  \item 使用了优先队列, 每次优先扩展估价低的状态;
+  \item 使用了估价剪枝, 大量不优路径被舍弃;
+  \item 使用状态去重, 避免重复搜索;
+\end{itemize}
+
+因此实际状态扩展远少于指数级, 时间复杂度为:
+
+\[
+\mathcal{O}(T \cdot k)
+\]
+
+\vskip 10mm
+
+其中~$T$~为实际扩展的状态数.
+
+\end{CJK*}
+
+
+% @结论
+\begin{CJK*}{UTF8}{zhhei}
+\zihao{5}
+\vskip 1mm
+\section{结论}
+\end{CJK*}
+
+\begin{CJK*}{UTF8}{song}
+
+本文从多个维度探索了经典算法在迷宫探险游戏中的集成应用与落地实现.
+通过构建满足特定可达性要求的迷宫生成器,
+结合~\textrm{OpenGL}~动态可视化技术,
+系统完成了从环境构造到交互展示的闭环.
+
+在策略层面, 设计并实现了针对全局与局部视野的路径规划方案.
+全局阶段采用动态规划算法, 有效规避陷阱并最大化资源收益;
+局部阶段则结合贪心与启发式策略, 使智能体在不完全信息下作出高收益决策,
+实验验证表明本方法在平均得分与稳定性上优于传统贪心策略.
+
+
+同时, 针对游戏中的逻辑推理与战斗博弈模块, 分别引入回溯法与分支限界法,
+成功实现对密码谜题的有效求解与~$\textrm{BOSS}$~战斗回合数的全局最优控制.
+两者均利用剪枝策略显著降低搜索空间, 提升求解效率与实用性.
+
+综上所述, 本文提出的算法融合式游戏设计模式不仅具备良好的通用性与可扩展性,
+也为算法教学与智能体训练提供了有价值的范式示例.
+
+\end{CJK*}
 
 \begin{CJK*}{UTF8}{song}
 
@@ -708,7 +845,19 @@ $$
 
 \vspace {3mm}
 \zihao{5}{
-\noindent \begin{CJK*}{UTF8}{zhhei}致\quad 谢\end{CJK*}\quad \begin{CJK*}{UTF8}{kai} *致谢内容.* 致谢\end{CJK*}}
+\noindent \begin{CJK*}{UTF8}{zhhei}致\quad 谢\end{CJK*}\quad \begin{CJK*}{UTF8}{kai}
+本项目得以顺利完成, 离不开指导老师的耐心指导与宝贵建议.
+在整个开发与撰写过程中, 老师在算法设计思路、技术实现细节及报告规范性方面都给予了我们极大的帮助.
+
+同时, 感谢团队成员在项目中通力合作、分工明确,
+特别是在迷宫生成、路径规划、策略优化、图形可视化等模块中的共同攻关与调试, 使得项目功能得以完整实现.
+
+此外, 感谢各类开源资源与社区文档为项目提供了良好的参考与支持,
+包括~OpenGL~图形库、SHA-256~加密库及~JSON~解析工具等, 为实现各模块功能提供了重要保障.
+
+再次感谢所有支持和帮助本项目顺利完成的老师与同学们!
+
+\end{CJK*}}
 
 
 \vspace {5mm}
@@ -720,52 +869,72 @@ $$
 \zihao{5-} \addtolength{\itemsep}{-1em}
 \vspace {1.5mm}
 
-\bibitem[1]{1}
-网上的文献(举例：The Cooperative
-Association for Internet Data Analysis(CAIDA),http://www.caida.org/data
-2010,7,18) \textbf{*请采用脚注放于正文出现处，每页的脚注从1开始编序号*}
-% \footnote{The Cooperative Association for Internet Data
-% Analysis (CAIDA), http://www.caida.org/data 2010, 7, 18}
+\bibitem[1]{1} Three maze generation algorithms: Depth-First Search, Randomized Prim’s Algorithm, and Recursive Division. \url{https://blog.csdn.net/qq_41517936/article/details/107047349}, 2020-06-30 \newline
+(三种迷宫算法（深度优先、随机Prim、递归分割）. \url{https://blog.csdn.net/qq_41517936/article/details/107047349}, 2020年6月30日)
 
-\bibitem[2]{2} 中文的参考文献需给出中英文对照。形式如[3]。
+\bibitem[2]{2} Wang Xiao-Dong. Design and Analysis of Computer Algorithms. 5th ed. Beijing: Publishing House of Electronics Industry, 2018 (in Chinese) \newline
+(王晓东. 计算机算法设计与分析. 第5版. 北京: 电子工业出版社, 2018)
 
-\bibitem[3]{3} Zhou Yong-Bin, Feng Deng-Guo. Design and analysis of cryptographic
-protocols for RFID. Chinese Journal of Computers, 2006, 29(4): 581-589 (in
-Chinese) \newline
-(周永彬, 冯登国. RFID安全协议的设计与分析. 计算机学报, 2006, 29(4): 581-589)
+\bibitem[3]{3} Cormen T. H., Leiserson C. E., Rivest R. L., Stein C. Introduction to Algorithms. 3rd ed. Cambridge, MA: MIT Press, 2009
 
-\bibitem[4]{4} 期刊、会议、书籍名称不能用缩写。
+\bibitem[4]{4} Aho A. V., Hopcroft J. E., Ullman J. D. The Design and Analysis of Computer Algorithms. Boston, MA: Pearson Education, 2007
 
-\bibitem[5]{5} 作者(外国人姓在前，名在后可缩写, 后同).
-题目(英文题目第一字母大写，其它均小写)：副标题(如果有). 刊名(全称), 年,
-卷(期): 页码 \textbf{*期刊论文格式*}
+\bibitem[5]{5} Tree-shaped Dynamic Programming (Tree DP). \url{https://zhuanlan.zhihu.com/p/657528677}, 2023-09-21 \newline
+([树形~DP]树形~DP 的通用思路. \url{https://zhuanlan.zhihu.com/p/657528677}, 2023年9月21日)
 
-\bibitem[6]{6}作者.
-文章题目(英文题目第1字母大写，其它均小写)：副标题(如果有)//Proceedings of
-the {\ldots} (会议名称). 会议召开城市, 会议召开城市所在国家, 年: 页码
-\textbf{*会议论文集论文格式*}
 
-\bibitem[7]{7}作者. 文章题目(英文题目第一字母大写, 其它均小写):
-副标题(如果有)//编者. 文集标题. 出版地: 出版社, 出版年: 页码
-\textbf{*文集格式*}
 
-\bibitem[8]{8}作者. 书名: 副标题(如果有). 版次(初版不写). 出版社地点: 出版社,
-出版年 \textbf{*书籍格式*}
+% \bibitem[1]{1}
+% 网上的文献(举例：The Cooperative
+% Association for Internet Data Analysis(CAIDA),http://www.caida.org/data
+% 2010,7,18) \textbf{*请采用脚注放于正文出现处，每页的脚注从1开始编序号*}
+% % \footnote{The Cooperative Association for Internet Data
+% % Analysis (CAIDA), http://www.caida.org/data 2010, 7, 18}
 
-\bibitem[9]{9}作者. 文章题目[博士学位论文/硕士学位论文]. 单位名称,单位地点, 年
-\textbf{*学位论文格式*}
+% \bibitem[2]{2} 中文的参考文献需给出中英文对照。形式如[3]。
 
-\bibitem[10]{10}作者. 文章题目(英文题目第一字母大写，其它均小写). 单位地点: 单位,
-技术报告: 报告编号, 年 \textbf{*技术报告*}
+% \bibitem[3]{3} Zhou Yong-Bin, Feng Deng-Guo. Design and analysis of cryptographic
+% protocols for RFID. Chinese Journal of Computers, 2006, 29(4): 581-589 (in
+% Chinese) \newline
+% (周永彬, 冯登国. RFID安全协议的设计与分析. 计算机学报, 2006, 29(4): 581-589)
 
-\bibitem[11]{11}专利拥有人. 专利名称，专利授权国家，专利授权日期
-\textbf{*技术专利*}
-  \end{thebibliography}
+% \bibitem[4]{4} 期刊、会议、书籍名称不能用缩写。
+
+% \bibitem[5]{5} 作者(外国人姓在前，名在后可缩写, 后同).
+% 题目(英文题目第一字母大写，其它均小写)：副标题(如果有). 刊名(全称), 年,
+% 卷(期): 页码 \textbf{*期刊论文格式*}
+
+% \bibitem[6]{6}作者.
+% 文章题目(英文题目第1字母大写，其它均小写)：副标题(如果有)//Proceedings of
+% the {\ldots} (会议名称). 会议召开城市, 会议召开城市所在国家, 年: 页码
+% \textbf{*会议论文集论文格式*}
+
+% \bibitem[7]{7}作者. 文章题目(英文题目第一字母大写, 其它均小写):
+% 副标题(如果有)//编者. 文集标题. 出版地: 出版社, 出版年: 页码
+% \textbf{*文集格式*}
+
+% \bibitem[8]{8}作者. 书名: 副标题(如果有). 版次(初版不写). 出版社地点: 出版社,
+% 出版年 \textbf{*书籍格式*}
+
+% \bibitem[9]{9}作者. 文章题目[博士学位论文/硕士学位论文]. 单位名称,单位地点, 年
+% \textbf{*学位论文格式*}
+
+% \bibitem[10]{10}作者. 文章题目(英文题目第一字母大写，其它均小写). 单位地点: 单位,
+% 技术报告: 报告编号, 年 \textbf{*技术报告*}
+
+% \bibitem[11]{11}专利拥有人. 专利名称，专利授权国家，专利授权日期
+% \textbf{*技术专利*}
+\end{thebibliography}
+
+  
+% \clearpage
 
 \begin{strip}
 \end{strip}
 
-\noindent {\zihao{5}\bf{附录1}. 伪代码}
+
+\vskip 100mm
+\noindent {\zihao{5}\bf{附录~1}. 伪代码}
 
 
 \begin{algorithm}
@@ -821,6 +990,138 @@ the {\ldots} (会议名称). 会议召开城市, 会议召开城市所在国家,
 \end{algorithmic}
 \end{algorithm}
 
+
+% @ code DP
+\begin{algorithm}
+\caption{Tree-Based Resource Collection via DFS and DP}
+\begin{algorithmic}[2]
+\Function{treeDP}{$maze$}
+    \State $must[x][y] \gets \textbf{true}$ if node is on path to end
+    \State $f[x][y] \gets$ maximum resource from subtree rooted at $(x,y)$
+    \Function{DFS}{$x, y, lastx, lasty$}
+        \If{$(x,y)$ is end}
+            \State $must[x][y] \gets \textbf{true}$; \Return
+        \EndIf
+        \State $f[x][y] \gets \text{value at } (x,y)$
+        \ForAll{neighbor $(u,v)$ of $(x,y)$}
+            \If{$(u,v)$ is accessible and $(u,v) \ne (lastx, lasty)$}
+                \State \Call{DFS}{$u,v,x,y$}
+                \If{$must[u][v]$}
+                    \State $must[x][y] \gets \textbf{true}$
+                    \State $f[x][y] \gets f[x][y] + f[u][v]$
+                \EndIf
+            \EndIf
+        \EndFor
+        \ForAll{non-must neighbor $(u,v)$}
+            \State $f[x][y] \gets f[x][y] + \max(0, f[u][v])$
+        \EndFor
+    \EndFunction
+    \State \Call{DFS}{$start_x, start_y, -1, -1$}
+    \State \Call{genPath}{$start_x, start_y, -1, -1$} \Comment{Recover actual path}
+    \State \Return \textbf{true}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Path Reconstruction Based on DP Result}
+\begin{algorithmic}[3]
+\Function{genPath}{$x, y, lastx, lasty$}
+    \State Append $(x,y)$ to path
+    \If{$must[x][y]$}
+        \ForAll{non-must neighbor $(u,v)$ with $f[u][v] > 0$}
+            \State \Call{genPath}{$u,v,x,y$}; Append $(x,y)$ to path
+        \EndFor
+        \ForAll{must neighbor $(u,v)$}
+            \State \Call{genPath}{$u,v,x,y$}
+        \EndFor
+    \Else
+        \ForAll{non-must neighbor $(u,v)$ with $f[u][v] > 0$}
+            \State \Call{genPath}{$u,v,x,y$}; Append $(x,y)$ to path
+        \EndFor
+    \EndIf
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{SmartRunner \texttt{run()} Main Execution Flow}
+\begin{algorithmic}[4]
+\Function{SmartRunner.run}{}
+    \State Initialize \texttt{currentMaze} with unknowns, mark \texttt{isPushed} to false
+    \State Locate start position $(x, y)$ where $originMaze[x][y] = S$
+    \State \Call{buildTree}{$x, y$} to build DFS tree and depths
+    \State Set $currentMaze[i][j] = originMaze[i][j]$ for $i, j \in 3 \times 3$ neighborhood of $(x, y)$
+    \State Mark start as pushed, add $(x, y)$ to queue $q$, path, and initial point
+
+    \While{$q$ is not empty}
+        \State Select $(tx, ty) \in q$ with highest priority via \Call{less}{$tx, ty, u, v$}
+        \State Pop $(tx, ty)$ from $q$, set $x \gets tx$, $y \gets ty$
+        \State Add $(x, y)$ to \texttt{point}, add value to $w$
+        \If{$(x, y)$ is $E$ and $B, L$ are both found}
+            \State \textbf{break}
+        \EndIf
+        \State Mark $B, L$ if met; mark surroundings as known in $currentMaze$
+        \ForAll{adjacent $(tx, ty)$ of $(x, y)$ not yet pushed}
+            \State Mark as pushed and add to $q$
+        \EndFor
+    \EndWhile
+
+    \For{$i = 1$ to $|point| - 1$}
+        \State \Call{genPath}{point[i-1], point[i]} and merge into final \texttt{path}
+    \EndFor
+    \State \Return \texttt{true}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\clearpage
+
+\begin{biography}[./figure/zjd.png]
+\noindent
+\begin{CJK*}{UTF8}{zhhei}张佳栋\end{CJK*}\ \
+负责核心算法模块的实现, 包括树形动态规划路径规划、启发式算法等.
+同时编写了可视化部分代码.
+以及负责汇报和报告的编写.
+
+工作量占比~$40\%$.
+
+\end{biography}
+
+\begin{biography}[./figure/fw.png]
+\noindent
+\begin{CJK*}{UTF8}{zhhei}方维\end{CJK*}\ \
+负责迷宫数据分支法构造与可视化导出, 以及最优路径和得分的保存.同时协助调试和测试完整流程.
+
+工作量占比~$20\%$.
+\end{biography}
+
+\begin{biography}[./figure/lxy.png]
+\noindent
+\begin{CJK*}{UTF8}{zhhei}逯熙钰\end{CJK*}\ \
+负责有限视野下的局部路径策略, 设计并实现了基于预期收益的贪心路径选择算法,
+提升了实时策略决策的效率与得分表现.
+
+工作量占比~$20\%$.
+\end{biography}
+
+\begin{biography}[./figure/jsh.png]
+\noindent
+\begin{CJK*}{UTF8}{zhhei}姜舜航\end{CJK*}\ \
+负责三位密码的回溯求解以及~BOSS~战分支限界法等关键功能.同时协助调试和测试完整流程.
+
+工作量占比~$20\%$.
+\end{biography}
+
+
+% \begin{strip}
+% \end{strip}
+
+% \noindent {\zihao{5}\bf{附录~2}. 组员签字}
+
+
+
+
 % \begin{strip}
 % \end{strip}
 
@@ -832,12 +1133,6 @@ the {\ldots} (会议名称). 会议召开城市, 会议召开城市所在国家,
 % *\textbf{附录内容}置于此处，字体为小5号宋体。附录内容包括：\textbf{详细的定理证明、公式推导、原始数据}等*
 
 
-% \begin{biography}[yourphotofilename.jpg]
-% \noindent
-% \textbf{First A. Author}\ \ *计算机学报第1作者提供照片电子图片，尺寸为1寸。英文作者介绍内容包括：出生年,学位(或目前学历),职称,主要研究领域(\textbf{与中文作者介绍中的研究方向一致}).*
-% *字体为小5号Times New Roman*
-
-% \end{biography}
 
 % \begin{biography}[yourphotofilename.jpg]
 % \noindent

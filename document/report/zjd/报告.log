@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.9.11)  23 JUL 2025 00:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.9.11)  23 JUL 2025 01:03
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**d:/code/maze_game/document/report/zjd/CjC_template_tex.tex
-(d:/code/maze_game/document/report/zjd/CjC_template_tex.tex
+**d:/code/maze_game/document/report/zjd/报告.tex
+(d:/code/maze_game/document/report/zjd/报告.tex
 LaTeX2e <2022-11-01> patch level 1
 L3 programming layer <2023-02-22> (./CjC.cls
 Document Class: CjC 2019/01/01 v0.1 CjC LaTeX Chinese template class
@@ -603,8 +603,8 @@ File: l3backend-pdftex.def 2023-01-16 L3 backend support: PDF output (pdfTeX)
 LaTeX Warning: Unused global option(s):
     [10.5pt,journal].
 
-(./CjC_template_tex.aux)
-\openout1 = `CjC_template_tex.aux'.
+(./报告.aux)
+\openout1 = `报告.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 71.
 LaTeX Font Info:    ... okay on input line 71.
@@ -1166,7 +1166,7 @@ Overfull \hbox (2.0025pt too wide) has occurred while \output is active
 [9
 
 
- <./figure/zjd.png> <./figure/fw.png> <./figure/lxy.png> <./figure/jsh.png>] (./CjC_template_tex.aux)
+ <./figure/zjd.png> <./figure/fw.png> <./figure/lxy.png> <./figure/jsh.png>] (./报告.aux)
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.23595pt have occurred.
@@ -1177,14 +1177,14 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
  ) 
 Here is how much of TeX's memory you used:
  13972 strings out of 476025
- 244550 string characters out of 5794015
+ 244440 string characters out of 5794015
  1896382 words of memory out of 5000000
  33342 multiletter control sequences out of 15000+600000
  638816 words of font info for 459 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 94i,19n,92p,1077b,1155s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 94i,19n,92p,1067b,1155s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simhei.ttf><simhei.ttf><simsun.ttc><simhei.ttf><simhei.ttf><simsun.ttc><simhei.ttf><simhei.ttf><simsun.ttc><simsun.ttc><simsun.ttc><simhei.ttf><simhei.ttf><simsun.ttc><simsun.ttc><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simsun.ttc><simhei.ttf><simhei.ttf><simsun.ttc><simsun.ttc><simhei.ttf><simsun.ttc><simsun.ttc><simhei.ttf><simhei.ttf><simhei.ttf><simsun.ttc><simsun.ttc><simsun.ttc><simhei.ttf><simhei.ttf><simsun.ttc><simsun.ttc><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simhei.ttf><simhei.ttf><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simfang.ttf><simfang.ttf><simfang.ttf><simfang.ttf><simfang.ttf><simfang.ttf><simfang.ttf><simfang.ttf><simfang.ttf><simfang.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb><d:/texlive/2023/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb><d:/texlive/2023/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><d:/texlive/2023/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><d:/texlive/2023/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on CjC_template_tex.pdf (9 pages, 761638 bytes).
+Output written on 报告.pdf (9 pages, 762174 bytes).
 PDF statistics:
  950 PDF objects out of 1000 (max. 8388607)
  630 compressed objects within 7 object streams

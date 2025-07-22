@@ -1,10 +1,8 @@
 # Fdb version 4
-["pdflatex"] 1753202863 "d:/code/maze_game/document/report/zjd/CjC_template_tex.tex" "CjC_template_tex.pdf" "CjC_template_tex" 1753202866 0
+["pdflatex"] 1753203823 "d:/code/maze_game/document/report/zjd/报告.tex" "报告.pdf" "报告" 1753203826 0
   "CjC.cls" 1753064934 12848 6d5eae3f62a8744a9dff9d66f614497f ""
-  "CjC_template_tex.aux" 1753202865 4978 99ba8353727de506501cebaef8499983 "pdflatex"
-  "CjC_template_tex.tex" 1753202862 42597 567275392b02be98fbf0c3de5096db07 ""
   "captionhack.sty" 1753064934 490 89f14c8302448df475610054e4d4c75c ""
-  "d:/code/maze_game/document/report/zjd/CjC_template_tex.tex" 1753202862 42597 567275392b02be98fbf0c3de5096db07 ""
+  "d:/code/maze_game/document/report/zjd/报告.tex" 1753203822 42637 2516590f743dcfbba99811bf845f614f ""
   "d:/texlive/2023/texmf-dist/fonts/enc/dvips/base/8r.enc" 1694441341 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "d:/texlive/2023/texmf-dist/fonts/map/fontname/texfonts.map" 1694441517 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "d:/texlive/2023/texmf-dist/fonts/sfd/ttf2pk/UGBK.sfd" 1694443319 182544 bcd31d5d273400b38612a969fcab55f9 ""
@@ -362,8 +360,10 @@
   "simhei.ttf" 1753064934 10044356 e25e47f09491a90b688e38e1b6203611 ""
   "simkai.ttf" 1753064934 11785184 489c067b4c4c856589f44fddbf9243e5 ""
   "simsun.ttc" 1753064934 10500792 d39f61861a6219c2dbb2367bfb772d86 ""
+  "报告.aux" 1753203825 4978 99ba8353727de506501cebaef8499983 "pdflatex"
+  "报告.tex" 1753203822 42637 2516590f743dcfbba99811bf845f614f ""
   (generated)
-  "CjC_template_tex.aux"
-  "CjC_template_tex.log"
-  "CjC_template_tex.pdf"
+  "报告.aux"
+  "报告.log"
+  "报告.pdf"
   (rewritten before read)

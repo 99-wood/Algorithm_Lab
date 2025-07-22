@@ -2,8 +2,8 @@ PWD d:/code/maze_game/document/report/zjd
 INPUT d:/texlive/2023/texmf.cnf
 INPUT d:/texlive/2023/texmf-dist/web2c/texmf.cnf
 INPUT d:/texlive/2023/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT d:/code/maze_game/document/report/zjd/CjC_template_tex.tex
-OUTPUT CjC_template_tex.log
+INPUT d:/code/maze_game/document/report/zjd/报告.tex
+OUTPUT 报告.log
 INPUT ./CjC.cls
 INPUT ./CjC.cls
 INPUT CjC.cls
@@ -860,10 +860,10 @@ INPUT d:/texlive/2023/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 INPUT d:/texlive/2023/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 INPUT d:/texlive/2023/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 INPUT d:/texlive/2023/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
-INPUT ./CjC_template_tex.aux
-INPUT CjC_template_tex.aux
-INPUT CjC_template_tex.aux
-OUTPUT CjC_template_tex.aux
+INPUT ./报告.aux
+INPUT 报告.aux
+INPUT 报告.aux
+OUTPUT 报告.aux
 INPUT d:/texlive/2023/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 INPUT d:/texlive/2023/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 INPUT d:/texlive/2023/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
@@ -897,7 +897,7 @@ INPUT d:/texlive/2023/texmf-dist/tex/latex/cjk/texinput/UTF8/c70song.fd
 INPUT d:/texlive/2023/texmf-dist/tex/latex/cjk/texinput/UTF8/c70song.fd
 INPUT d:/texlive/2023/texmf-dist/tex/latex/cjk/texinput/UTF8/c70song.fd
 INPUT d:/texlive/2023/texmf-dist/fonts/tfm/zhmetrics/cyberb/cyberb7b.tfm
-OUTPUT CjC_template_tex.pdf
+OUTPUT 报告.pdf
 INPUT d:/texlive/2023/texmf-dist/fonts/tfm/zhmetrics/cyberb/cyberb53.tfm
 INPUT d:/texlive/2023/texmf-dist/fonts/tfm/zhmetrics/cyberb/cyberb67.tfm
 INPUT d:/texlive/2023/texmf-dist/fonts/tfm/zhmetrics/cyberb/cyberb8b.tfm
@@ -1458,7 +1458,7 @@ INPUT d:/texlive/2023/texmf-dist/fonts/tfm/zhmetrics/unihei/unihei82.tfm
 INPUT d:/texlive/2023/texmf-dist/fonts/tfm/zhmetrics/cyberb/cyberb95.tfm
 INPUT d:/texlive/2023/texmf-dist/tex/latex/cjk/texinput/UTF8/UTF8.enc
 INPUT d:/texlive/2023/texmf-dist/tex/latex/cjk/texinput/UTF8/UTF8.chr
-INPUT CjC_template_tex.aux
+INPUT 报告.aux
 INPUT simhei.ttf
 INPUT simhei.ttf
 INPUT simhei.ttf
