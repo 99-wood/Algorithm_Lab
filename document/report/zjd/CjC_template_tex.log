@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.9.11)  22 JUL 2025 11:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.9.11)  22 JUL 2025 22:54
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -908,7 +908,7 @@ File: UTF8.chr 2021/10/16 4.8.5
 Underfull \vbox (badness 1824) has occurred while \output is active []
 
 
-Overfull \hbox (16.03755pt too wide) detected at line 320
+Overfull \hbox (16.76765pt too wide) detected at line 320
 []
  []
 
@@ -943,65 +943,14 @@ Overfull \vbox (5.78505pt too high) has occurred while \output is active []
 <./figure/fig1.png, id=206, 203.013pt x 147.606pt>
 File: ./figure/fig1.png Graphic file (type png)
 <use ./figure/fig1.png>
-Package pdftex.def Info: ./figure/fig1.png  used on input line 402.
-(pdftex.def)             Requested size: 209.97992pt x 152.68002pt.
-<./figure/fig2.png, id=208, 797.16pt x 84.972pt>
+Package pdftex.def Info: ./figure/fig1.png  used on input line 403.
+(pdftex.def)             Requested size: 216.81pt x 157.6463pt.
+<./figure/fig2.png, id=208, 216.153pt x 147.606pt>
 File: ./figure/fig2.png Graphic file (type png)
 <use ./figure/fig2.png>
-Package pdftex.def Info: ./figure/fig2.png  used on input line 411.
-(pdftex.def)             Requested size: 209.97992pt x 22.38132pt.
-
-
-LaTeX Font Warning: Font shape `C70/song/b/n' undefined
-(Font)              using `C70/song/m/n' instead on input line 437.
-
-<CJC1.pdf, id=212, 1897.0875pt x 1192.455pt>
-File: CJC1.pdf Graphic file (type pdf)
-<use CJC1.pdf>
-Package pdftex.def Info: CJC1.pdf  used on input line 489.
-(pdftex.def)             Requested size: 227.64067pt x 143.08842pt.
-
-Overfull \hbox (2.0025pt too wide) has occurred while \output is active
-[] 
- []
-
-
-Overfull \vbox (5.78505pt too high) has occurred while \output is active []
-
- [3 <./figure/fig1.png> <./figure/fig2.png> <./CJC1.pdf>]
-LaTeX Font Info:    Trying to load font information for C70+kai on input line 532.
- (d:/texlive/2023/texmf-dist/tex/latex/zhmetrics/c70kai.fd
-File: c70kai.fd 2009/09/23 4.8.2
-)
-CUTED [- LAST -]
-Extra skip:0.0pt
-Left:267.4897pt/1.95572pt
-Right:275.46693pt/0.0pt
-Split: 272.4518pt
-Output:272.4518pt
-Pageshrink: 0.0pt
-Pagestretch: 0.0pt
-@colht:668.63977pt
-CUTED [output]: 272.4518pt
-CUTED [leftcolumn badness]: 12
-CUTED [rightcolumn badness]: 0
-
-
-LaTeX Warning: Float too large for page by 17.0838pt on input line 643.
-
-- LAST -
-Extra skip:11.05394pt
-Left:10.0pt/1.05394pt
-Right:0.0pt/0.0pt
-Split: 5.0pt
-Output:5.0pt
-Pageshrink: 0.0pt
-Pagestretch: 0.0pt
-@colht:356.18797pt
-FLUSHEND [output]: 5.0pt
-FLUSHEND [leftcolumn badness]: 1000000
-FUSHEND [rightcolumn badness]: 0
-(d:/texlive/2023/texmf-dist/tex/latex/cjk/texinput/UTF8/UTF8.enc
+Package pdftex.def Info: ./figure/fig2.png  used on input line 409.
+(pdftex.def)             Requested size: 227.65005pt x 155.46385pt.
+ (d:/texlive/2023/texmf-dist/tex/latex/cjk/texinput/UTF8/UTF8.enc
 File: UTF8.enc 2021/10/16 4.8.5
 ) (d:/texlive/2023/texmf-dist/tex/latex/cjk/texinput/UTF8/UTF8.chr
 File: UTF8.chr 2021/10/16 4.8.5
@@ -1009,7 +958,11 @@ File: UTF8.chr 2021/10/16 4.8.5
 File: UTF8.enc 2021/10/16 4.8.5
 ) (d:/texlive/2023/texmf-dist/tex/latex/cjk/texinput/UTF8/UTF8.chr
 File: UTF8.chr 2021/10/16 4.8.5
-) [4] (d:/texlive/2023/texmf-dist/tex/latex/cjk/texinput/UTF8/UTF8.enc
+) (d:/texlive/2023/texmf-dist/tex/latex/cjk/texinput/UTF8/UTF8.enc
+File: UTF8.enc 2021/10/16 4.8.5
+) (d:/texlive/2023/texmf-dist/tex/latex/cjk/texinput/UTF8/UTF8.chr
+File: UTF8.chr 2021/10/16 4.8.5
+) (d:/texlive/2023/texmf-dist/tex/latex/cjk/texinput/UTF8/UTF8.enc
 File: UTF8.enc 2021/10/16 4.8.5
 ) (d:/texlive/2023/texmf-dist/tex/latex/cjk/texinput/UTF8/UTF8.chr
 File: UTF8.chr 2021/10/16 4.8.5
@@ -1021,9 +974,72 @@ Overfull \hbox (2.0025pt too wide) has occurred while \output is active
 
 Overfull \vbox (5.78505pt too high) has occurred while \output is active []
 
- [5
+ [3 <./figure/fig1.png> <./figure/fig2.png>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-] (./CjC_template_tex.aux)
+ (d:/texlive/2023/texmf-dist/tex/latex/cjk/texinput/UTF8/UTF8.enc
+File: UTF8.enc 2021/10/16 4.8.5
+) (d:/texlive/2023/texmf-dist/tex/latex/cjk/texinput/UTF8/UTF8.chr
+File: UTF8.chr 2021/10/16 4.8.5
+) (d:/texlive/2023/texmf-dist/tex/latex/cjk/texinput/UTF8/UTF8.enc
+File: UTF8.enc 2021/10/16 4.8.5
+) (d:/texlive/2023/texmf-dist/tex/latex/cjk/texinput/UTF8/UTF8.chr
+File: UTF8.chr 2021/10/16 4.8.5
+) (d:/texlive/2023/texmf-dist/tex/latex/cjk/texinput/UTF8/UTF8.enc
+File: UTF8.enc 2021/10/16 4.8.5
+) (d:/texlive/2023/texmf-dist/tex/latex/cjk/texinput/UTF8/UTF8.chr
+File: UTF8.chr 2021/10/16 4.8.5
+)
+LaTeX Font Info:    Trying to load font information for C70+kai on input line 711.
+ (d:/texlive/2023/texmf-dist/tex/latex/zhmetrics/c70kai.fd
+File: c70kai.fd 2009/09/23 4.8.2
+)
+
+LaTeX Font Warning: Font shape `C70/song/b/n' undefined
+(Font)              using `C70/song/m/n' instead on input line 726.
+
+CUTED [- LAST -]
+Extra skip:0.0pt
+Left:604.89476pt/1.48595pt
+Right:600.99583pt/0.0pt
+Split: 610.20566pt
+Output:610.20566pt
+Pageshrink: 0.0pt
+Pagestretch: 0.0pt
+@colht:668.63977pt
+CUTED [output]: 610.20566pt
+CUTED [leftcolumn badness]: 12
+CUTED [rightcolumn badness]: 1
+
+LaTeX Warning: Optional argument of \twocolumn too tall on page 4(2column).
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+LaTeX Warning: Text page 4 contains only floats.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Overfull \vbox (5.78505pt too high) has occurred while \output is active []
+
+ [4]
+
+LaTeX Warning: Float too large for page by 17.0838pt on input line 822.
+
+(d:/texlive/2023/texmf-dist/tex/latex/cjk/texinput/UTF8/UTF8.enc
+File: UTF8.enc 2021/10/16 4.8.5
+) (d:/texlive/2023/texmf-dist/tex/latex/cjk/texinput/UTF8/UTF8.chr
+File: UTF8.chr 2021/10/16 4.8.5
+)
+Overfull \hbox (2.0025pt too wide) has occurred while \output is active
+[] 
+ []
+
+[5] (./CjC_template_tex.aux)
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.23595pt have occurred.
@@ -1033,18 +1049,18 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 13318 strings out of 476025
- 232632 string characters out of 5794015
- 1896382 words of memory out of 5000000
- 32850 multiletter control sequences out of 15000+600000
- 606514 words of font info for 341 fonts, out of 8000000 for 9000
+ 13440 strings out of 476025
+ 235255 string characters out of 5794015
+ 1911382 words of memory out of 5000000
+ 32945 multiletter control sequences out of 15000+600000
+ 615154 words of font info for 373 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 94i,19n,92p,1077b,1339s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<simhei.ttf><simhei.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simhei.ttf><simhei.ttf><simhei.ttf><simsun.ttc><simsun.ttc><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simsun.ttc><simhei.ttf><simhei.ttf><simsun.ttc><simsun.ttc><simhei.ttf><simsun.ttc><simsun.ttc><simhei.ttf><simhei.ttf><simhei.ttf><simsun.ttc><simsun.ttc><simsun.ttc><simhei.ttf><simhei.ttf><simsun.ttc><simsun.ttc><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simhei.ttf><simhei.ttf><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simfang.ttf><simfang.ttf><simfang.ttf><simfang.ttf><simfang.ttf><simfang.ttf><simfang.ttf><simfang.ttf><simfang.ttf><simfang.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb><d:/texlive/2023/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><d:/texlive/2023/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on CjC_template_tex.pdf (5 pages, 944642 bytes).
+ 94i,19n,92p,1077b,1156s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<simhei.ttf><simhei.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simkai.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simsun.ttc><simhei.ttf><simhei.ttf><simsun.ttc><simsun.ttc><simsun.ttc><simhei.ttf><simhei.ttf><simsun.ttc><simsun.ttc><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simsun.ttc><simhei.ttf><simhei.ttf><simsun.ttc><simsun.ttc><simhei.ttf><simsun.ttc><simsun.ttc><simhei.ttf><simhei.ttf><simhei.ttf><simsun.ttc><simsun.ttc><simsun.ttc><simhei.ttf><simhei.ttf><simsun.ttc><simsun.ttc><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simhei.ttf><simhei.ttf><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simfang.ttf><simfang.ttf><simfang.ttf><simfang.ttf><simfang.ttf><simfang.ttf><simfang.ttf><simfang.ttf><simfang.ttf><simfang.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simhei.ttf><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><simsun.ttc><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><d:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb><d:/texlive/2023/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><d:/texlive/2023/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
+Output written on CjC_template_tex.pdf (5 pages, 590702 bytes).
 PDF statistics:
- 720 PDF objects out of 1000 (max. 8388607)
- 468 compressed objects within 5 object streams
+ 710 PDF objects out of 1000 (max. 8388607)
+ 461 compressed objects within 5 object streams
  0 named destinations out of 1000 (max. 500000)
- 316 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 311 words of extra memory for PDF output out of 10000 (max. 10000000)
 

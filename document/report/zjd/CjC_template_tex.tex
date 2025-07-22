@@ -298,31 +298,31 @@ maze generation; tree-based DP; greedy strategy; heuristic strategy; backtrackin
 \begin{CJK*}{UTF8}{zhhei}\subsection{复杂度分析}\end{CJK*}
 
 \begin{CJK*}{UTF8}{song}
-下面用归纳法证明对于生成一个~$a \times b$~的迷宫的时间复杂度是~$O(a \times b)$.
+下面用归纳法证明对于生成一个~$a \times b$~的迷宫的时间复杂度是~$\mathcal{O}(a \times b)$.
 
 由于最小子问题是一个~$1 \times n$~或~$n \times 1$~大小的块, 
-处理这样一个子问题的复杂度是~$O(n)$~的, 满足归纳假设.
+处理这样一个子问题的复杂度是~$\mathcal{O}(n)$~的, 满足归纳假设.
 
-假设对于所有~$a < A, b < B$~的问题的复杂度~$T(a,b) = O(a \times b)$.
+假设对于所有~$a < A, b < B$~的问题的复杂度~$T(a,b) = \mathcal{O}(a \times b)$.
 
-对于一个~$A \times B$~的问题, 假设划分大小为~$p, q$. 划分的复杂度为~$O(1)$.
+对于一个~$A \times B$~的问题, 假设划分大小为~$p, q$. 划分的复杂度为~$\mathcal{O}(1)$.
 
 那么复杂度
 
 \vskip -4mm
 
 \begin{align*}
-T(A,B) &= O(1) + T(p,q) + T(p,B-q) + {} \\
+T(A,B) &= \mathcal{O}(1) + T(p,q) + T(p,B-q) + {} \\
        &\quad + T(A-p,q) + T(A-p,B-q) \\
-       &= O(1) + O(p \times q) + O(p \times (B - q)) + {} \\
-       &\quad + O((A - p) \times q) + O((A - p) \times (B - q)) \\
-       &= O(A \times B)
+       &= \mathcal{O}(1) + \mathcal{O}(p \times q) + \mathcal{O}(p \times (B - q)) + {} \\
+       &\quad + \mathcal{O}((A - p) \times q) + \mathcal{O}((A - p) \times (B - q)) \\
+       &= \mathcal{O}(A \times B)
 \end{align*}.
 
 
-所以, 规模为~$a \times b$~的问题的时间复杂度是~$O(a \times b)$.
+所以, 规模为~$a \times b$~的问题的时间复杂度是~$\mathcal{O}(a \times b)$.
 
-特别的, 当~$a=b=n$~时, 复杂度为~$O(n^2)$.
+特别的, 当~$a=b=n$~时, 复杂度为~$\mathcal{O}(n^2)$.
 \end{CJK*}
 
 \begin{CJK*}{UTF8}{zhhei}\subsection{伪代码}\end{CJK*}
@@ -344,7 +344,7 @@ T(A,B) &= O(1) + T(p,q) + T(p,B-q) + {} \\
 
 \begin{CJK*}{UTF8}{song}
 任务: 计算从起点到终点的最优资源收集路径, 避开陷阱, 优先拾取资源.
-例如: 状态 dp[i][j] 表示走到坐标(i,j)时的最大资源值.
+例如: 状态~dp[i][j]~表示走到坐标(i,j)时的最大资源值.
 
 输入：迷宫矩阵、资源分布 (例如金币~$=5$)、陷阱位置 (可设置陷阱~$=-3$).
 
@@ -389,143 +389,322 @@ $\textrm{must}_{i,j}$~表示点~$(i,j)$~是否为从起点到终点必须经过�
 
 对于不同~$\textrm{must}$~的点的构建方法不同.
 
-对于~$\textrm{must}$~为真的点, 需要先输出自己的坐标,
+对于~$\textrm{must}$~为真的节点, 需要先输出自己的坐标,
 然后依次构建~$\textrm{must}$~为假并且采用其中权值的子树的路径,
 中间穿插自己的坐标, 最后构建~$\textrm{must}$~为真的子树的路径.
 
-
-
-\begin{figure}[htbp]
-    \centering
-	\begin{minipage}{\linewidth}
-		\centering
-		\includegraphics[width=0.9\linewidth]{./figure/fig1.png}
-		\caption{\begin{CJK}{UTF8}{song}$\textrm{must}$~为真的点的结构\end{CJK}}
-        \label{fig1a}%文中引用该图片代号
-	\end{minipage}
-	% \qquad
-	%让图片换行，
-	
-	\begin{minipage}{\linewidth}
-		\centering
-		\includegraphics[width=0.9\linewidth]{./figure/fig2.png}
-		\caption{\begin{CJK}{UTF8}{song}$\textrm{must}$~为真的点的路径构建顺序\end{CJK}}
-		\label{fig2}%文中引用该图片代号
-	\end{minipage}
-% \centerline{\includegraphics[width=3.15in,height=1.98in]{./figure/fig1.png}}
-% \centerline{\includegraphics[width=3.15in,height=1.98in]{./figure/fig2.png}}
-% 图X\quad  图片说明 *字体为小5号，图片应为黑白图，图中的子图要有子图说明*
-% \label{fig2}
-\end{figure}
-
-% \begin{CJK*}{UTF8}{song}
-% wssb
+对于~$\textrm{must}$~为假的节点, 也需要先输出自己的坐标,
+然后依次构建采用其中权值的子树的路径, 中间穿插自己的坐标,
+并且最后也要输出自己的坐标.
 
 % \end{CJK*}
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=3in]{./figure/fig1.png}}
+\begin{CJK*}{UTF8}{song}图1\quad  $\textrm{must}$~为真的节点的子树路径构建顺序\end{CJK*}
+\label{fig1}
+\end{figure}
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=3.15in]{./figure/fig2.png}}
+\begin{CJK*}{UTF8}{song}图2\quad  $\textrm{must}$~为假的节点的子树的路径构建顺序\end{CJK*}
+\label{fig2}
+\end{figure}
+
+
+\begin{CJK*}{UTF8}{zhhei}\subsection{复杂度分析}\end{CJK*}
+
+
+本算法采用自底向上的树形动态规划方法,
+其中每个点~$p$~只会在其父节点的转移中被访问一次,
+而~$\textrm{must}$~的计算也是在一次~DFS~遍历中完成的。
+
+首先, 自底向上计算每个点是否为必须经过的点, 即~$\textrm{must}_p$.
+该过程为一次~DFS, 遍历所有点与边, 时间复杂度为~$\mathcal{O}(n)$。
+
+接下来计算每个点的~$\textrm{dp}_p$,
+其依赖于所有子节点的~$\textrm{dp}_x$.
+由于每条边最多只会被访问一次, 整个~DP~的计算同样是~$\mathcal{O}(n)$.
+
+因此, 总体时间复杂度为: 
+\[
+\mathcal{O}(n + m)
+\]
+
+该算法空间复杂度也为~$\mathcal{O}(n)$,
+用于记录每个点的~$\textrm{dp}$~和~$\textrm{must}$~状态。
 
 \begin{CJK*}{UTF8}{zhhei}\subsection{伪代码}\end{CJK*}
 
-见附录~1.
-% \end{CJK*}
-
 % \begin{CJK*}{UTF8}{song}
 
-{\begin{CJK*}{UTF8}{zhhei}\subsection{二级标题 *字体为5号黑体*标题2}\end{CJK*}}
-\subsubsection{三级标题 *字体为5号宋体*标题3}
-*正文部分, 字体为5号宋体* 正文文字
+见附录~1.
 
-\textbf{正文文字要求语句通顺，无语法错误，结构合理，条理清楚，不影响审稿人、读者阅读理解全文内容。以下几类问题请作者们特别注意}：
+\end{CJK*}
 
-1) 文章题目应明确反映文章的思想和方法；文字流畅，表述清楚；
 
-2) 中文文字、英文表达无语法错误；
+% @贪心
+\begin{CJK*}{UTF8}{zhhei}
+\zihao{5}
+\vskip 1mm
+\section{贪心算法实时策略模拟}
+\end{CJK*}
 
-3) 公式中无符号、表达式的疏漏，没有同一个符号表示两种意思的情况；
+\begin{CJK*}{UTF8}{song}
+    
+\begin{CJK*}{UTF8}{zhhei}\subsection{问题描述}\end{CJK*}
 
-4) 数学中使用的符号、函数名用斜体；
+任务: 玩家视野受限于周围区域, 每次移动时优先选择视野内~"性价比"(例如单位距离收益最大) 最高的资源, 重复直至无资源可拾取.
+输入: 当前玩家位置、视野内的资源信息.
+输出: 资源拾取路径.
+    
+\begin{CJK*}{UTF8}{zhhei}\subsection{贪心策略}\end{CJK*}
 
-5) 使用的量符合法定计量单位标准；
+\begin{CJK*}{UTF8}{zhhei}1. 优先级驱动的贪心算法\end{CJK*}
 
-6) 矢量为黑体，标量为白体；
+分四个优先级搜索目标, 优先级为:
 
-7) 变量或表示变化的量用斜体；
+\vskip -4.5mm
+$$
+\textrm{BOSS~/~机关} > \textrm{金币} > \textrm{通路} > \textrm{出口}.
+$$
 
-8) 图表规范，量、线、序无误，位置正确(图表必须在正文中有所表述后出现，即{\ldots}如图1所示)(注意纵、横坐标应有坐标名称和刻度值)。
+每个阶段只考虑当前最高优先级的可行目标.
 
-9) 列出的参考文献必须在文中按顺序引用，即参考文献顺序与引用顺序一致，各项信息齐全(格式见参考文献部分)；
+\begin{CJK*}{UTF8}{zhhei}2. 记忆已探索地图\end{CJK*}
 
-10) 首次出现的缩写需写明全称，首次出现的符号需作出解释。
+维持视野为~$3 \times 3$~范围, 但记录已探索的区域.
+利于收集暂时被搁置的资源, 探索待探索的区域.
+动态更新环境认知, 优先利用已知信息, 逐步扩展未知区域.
 
-11) 图的图例说明、坐标说明全部用中文或量符号。
+\begin{CJK*}{UTF8}{zhhei}3. 贪心探索路径\end{CJK*}
 
-\textbf{12) 图应为矢量图。}
+优先尝试非陷阱路径,
+失败后才降级允许陷阱路径,
+当高优先级目标不可达时, 会降级搜索低优先级目标.
+    
+\begin{CJK*}{UTF8}{zhhei}\subsection{复杂度分析}\end{CJK*}
 
-13) 表中表头文字采用中文。
+在最坏情况下, 可能需要探索整个地图遍历所有~$n^2$~个格子.
+每次寻找当前最高优先级的目标, 可以使用一个大根堆,
+取得一次最高优先级的元素复杂度为~$\mathcal{O}(\log (n^2)) = \mathcal{O}(\log n)$.
+所以总的时间复杂度为~$\mathcal{O}(n^2 \log n)$.
+    
+\begin{CJK*}{UTF8}{zhhei}\subsection{伪代码}\end{CJK*}
 
-14) 公式尺寸：
+见附录~1.
 
-标准：10.5磅
+\end{CJK*}
 
-下标/上标：5.8磅
 
-次下标/上标：4.5磅
+% @启发式
+\begin{CJK*}{UTF8}{zhhei}
+\zihao{5}
+\vskip 1mm
+\section{启发式算法实时策略模拟}
+\end{CJK*}
 
-符号：16磅
+\begin{CJK*}{UTF8}{song}
+    
+\begin{CJK*}{UTF8}{zhhei}\subsection{原有算法的不足和改进}\end{CJK*}
 
-次符号：10.5磅
+原本的贪心算法虽然可以找到一个尽可能最大化资源且符合要求的路径,
+但是有些情况下, 它会被陷阱“吓到”而损失了金币,
+毕竟谁也不知道一个陷阱的背后是另一块陷阱还是一大片金币.
+换而言之, 原本的贪心算法十分“保守”.
 
-15) 组合单位采用标准格式，如：``pJ/bit/m$^{4}$''应为 ``pJ/(bit$\cdot
-$m$^{4})$''
+对此, 我们提出了一种启发式的算法,
+该算法在原有贪心的基础上, 引入了估价函数,
+对于一片被陷阱挡住的未知区域, 我们可以计算其期望的价值来判断是否“冒险”进入.
 
-{\begin{CJK*}{UTF8}{zhhei}\textbf{定理1}.\end{CJK*}}\quad ******. *定理内容.*
+    
+\begin{CJK*}{UTF8}{zhhei}\subsection{算法描述}\end{CJK*}
 
-[``定义''、``假设''、``公理''、``引理''等的排版格式与此相同，详细定理证明、公式可放在附录中]
+为了实现以上改进, 我们优化后的算法有以下几个部分组成:
 
-{\begin{CJK*}{UTF8}{song}证明\end{CJK*}}.\quad  *证明过程.* [``例 x''等的排版格式相同]
+1. 视野更新机制
 
-\rightline {证毕.}
+2. 优先级策略设计~(策略核心)
 
-\begin{figure}[htbp]
-\centerline{\includegraphics[width=3.15in,height=1.98in]{CJC1.pdf}}
-图X\quad  图片说明 *字体为小5号，图片应为黑白图，图中的子图要有子图说明*
-\label{CJC1}
-\end{figure}
+3. 预期资源收益估计
+
+\subsubsection{视野更新机制}
+
+只更新当前位置周围~$3 \times 3$~的格子,未探索区域标记为未知.
+每当角色移动到新位置, 就拓展一圈视野, 更新地图.
+
+\subsubsection{优先级策略设计~(策略核心)}
+
+核心目标: 在已知有限信息下, 选择最“有希望”的方向前进.
+
+在没有找全~BOSS~和机关的情况下:
+$$
+\textrm{金币}=\textrm{通路}=\textrm{BOSS}=\textrm{机关}>\textrm{陷阱}>\textrm{终点}.
+$$
+
+在找全~BOSS~和机关的情况下:
+$$
+\textrm{金币}=\textrm{通路}=\textrm{BOSS}=\textrm{机关}>\textrm{陷阱}>\textrm{终点}.
+$$
+
+对于找全~BOSS~和机关的情况下如果可见且未到达方块中只有陷阱和终点,
+我们需要计算陷阱和终点的预期资源收益估计, 如果一个陷阱的预期资源收益估计为正,
+我们就会选择去“探索”.
+
+\subsubsection{预期资源收益估计}
+
+使用类似启发式扩展的方法, 预测从某个点出发能收集多少资源:
+可见格子收益为 $1$ 倍；
+未知格子按经验折扣估值, 乘一个系数~$r$.
+
+\begin{CJK*}{UTF8}{zhhei}\subsection{复杂度分析}\end{CJK*}
+
+在最坏情况下, 可能需要探索整个地图遍历所有~$n^2$~个格子.
+每次寻找当前最高优先级的目标, 但是由于现在的优先级是实时更新的，不可以用大根堆,
+所以取得一次最高优先级的元素复杂度为~$\mathcal{O}(n^2)$.
+所以总的时间复杂度为~$\mathcal{O}(n^4)$.
+    
+\begin{CJK*}{UTF8}{zhhei}\subsection{实验结果}\end{CJK*}
+
+对于~DP,~贪心,~启发式算法在随机生成的~100~个地图下测试, 计算平均收益.
+\vskip 30mm
 
 \begin{table}[htbp]
-\centering {\begin{CJK*}{UTF8}{zhhei}表X\quad 表说明 *表说明采用黑体*\end{CJK*}}
-\vspace {-2.5mm}
+\centering {\begin{CJK*}{UTF8}{zhhei}表1\quad 各算法在不同地图规模下的执行效果比较\end{CJK*}} % 黑体表说明
+\vspace{-2.5mm}
 \begin{center}
-\begin{tabular}{ll}
+\begin{tabular}{lccc}
 \toprule
-*示例表格*&*第1行为表头,表头要有内容* \\
+算法 & $7\times7$ & $11 \times 11$ & $15 \times 15$ \\  % 表头
 \hline
-&
- \\
-&
- \\
-&
- \\
-&
- \\
+贪心策略 & 85.3 & 78.2 & 65.4 \\
+动态规划 & 89.1 & 83.7 & 71.8 \\
+启发式算法 & 92.0 & 85.5 & 69.2 \\
 \bottomrule
 \end{tabular}
 \label{tab1}
 \end{center}
 \end{table}
 
-\begin{CJK*}{UTF8}{zhhei}过程X.\end{CJK*}\quad 过程名称
-
-{\zihao{5-}*《计算机学报》的方法过程描述字体为小5号宋体，IF、THEN等伪代码关键词全部用大写字母，变量和函数名称用斜体*}
+\end{CJK*}
 
 
-\begin{CJK*}{UTF8}{zhhei}算法\textbf{Y}\end{CJK*}.\quad 算法名称.
-\zihao{5-}{
+% @回溯法
+\begin{CJK*}{UTF8}{zhhei}
+\zihao{5}
+\vskip 1mm
+\section{回溯法解锁机关密码}
+\end{CJK*}
 
-\noindent 输入：{\ldots} {\ldots}
+\begin{CJK*}{UTF8}{song}
+\begin{CJK*}{UTF8}{zhhei}\subsection{问题描述}\end{CJK*}
 
-\noindent 输出：{\ldots} {\ldots}
+输入: 一个~$3$~位密码锁的位置和线索 (如每位密码为素数且不重复、或第~$1$~位是偶数等)
 
-*《计算机学报》的算法描述字体为小5号宋体, IF、THEN等伪代码关键词全部用大写字母，变量和函数名称用斜体*}
+输出：密码
+
+\end{CJK*}
+
+
+
+\begin{CJK*}{UTF8}{song}
+
+% {\begin{CJK*}{UTF8}{zhhei}\subsection{二级标题 *字体为5号黑体*标题2}\end{CJK*}}
+% \subsubsection{三级标题 *字体为5号宋体*标题3}
+% *正文部分, 字体为5号宋体* 正文文字
+
+% \textbf{正文文字要求语句通顺，无语法错误，结构合理，条理清楚，不影响审稿人、读者阅读理解全文内容。以下几类问题请作者们特别注意}：
+
+% 1) 文章题目应明确反映文章的思想和方法；文字流畅，表述清楚；
+
+% 2) 中文文字、英文表达无语法错误；
+
+% 3) 公式中无符号、表达式的疏漏，没有同一个符号表示两种意思的情况；
+
+% 4) 数学中使用的符号、函数名用斜体；
+
+% 5) 使用的量符合法定计量单位标准；
+
+% 6) 矢量为黑体，标量为白体；
+
+% 7) 变量或表示变化的量用斜体；
+
+% 8) 图表规范，量、线、序无误，位置正确(图表必须在正文中有所表述后出现，即{\ldots}如图1所示)(注意纵、横坐标应有坐标名称和刻度值)。
+
+% 9) 列出的参考文献必须在文中按顺序引用，即参考文献顺序与引用顺序一致，各项信息齐全(格式见参考文献部分)；
+
+% 10) 首次出现的缩写需写明全称，首次出现的符号需作出解释。
+
+% 11) 图的图例说明、坐标说明全部用中文或量符号。
+
+% \textbf{12) 图应为矢量图。}
+
+% 13) 表中表头文字采用中文。
+
+% 14) 公式尺寸：
+
+% 标准：10.5磅
+
+% 下标/上标：5.8磅
+
+% 次下标/上标：4.5磅
+
+% 符号：16磅
+
+% 次符号：10.5磅
+
+% 15) 组合单位采用标准格式，如：``pJ/bit/m$^{4}$''应为 ``pJ/(bit$\cdot
+% $m$^{4})$''
+
+% {\begin{CJK*}{UTF8}{zhhei}\textbf{定理1}.\end{CJK*}}\quad ******. *定理内容.*
+
+% [``定义''、``假设''、``公理''、``引理''等的排版格式与此相同，详细定理证明、公式可放在附录中]
+
+% {\begin{CJK*}{UTF8}{song}证明\end{CJK*}}.\quad  *证明过程.* [``例 x''等的排版格式相同]
+
+% \rightline {证毕.}
+
+% \begin{figure}[htbp]
+% \centerline{\includegraphics[width=3.15in,height=1.98in]{CJC1.pdf}}
+% 图X\quad  图片说明 *字体为小5号，图片应为黑白图，图中的子图要有子图说明*
+% \label{CJC1}
+% \end{figure}
+
+% \begin{table}[htbp]
+% \centering {\begin{CJK*}{UTF8}{zhhei}表X\quad 表说明 *表说明采用黑体*\end{CJK*}}
+% \vspace {-2.5mm}
+% \begin{center}
+% \begin{tabular}{ll}
+% \toprule
+% *示例表格*&*第1行为表头,表头要有内容* \\
+% \hline
+% &
+%  \\
+% &
+%  \\
+% &
+%  \\
+% &
+%  \\
+% \bottomrule
+% \end{tabular}
+% \label{tab1}
+% \end{center}
+% \end{table}
+
+% \begin{CJK*}{UTF8}{zhhei}过程X.\end{CJK*}\quad 过程名称
+
+% {\zihao{5-}*《计算机学报》的方法过程描述字体为小5号宋体，IF、THEN等伪代码关键词全部用大写字母，变量和函数名称用斜体*}
+
+
+% \begin{CJK*}{UTF8}{zhhei}算法\textbf{Y}\end{CJK*}.\quad 算法名称.
+% \zihao{5-}{
+
+% \noindent 输入：{\ldots} {\ldots}
+
+% \noindent 输出：{\ldots} {\ldots}
+
+% *《计算机学报》的算法描述字体为小5号宋体, IF、THEN等伪代码关键词全部用大写字母，变量和函数名称用斜体*}
 
 \vspace {3mm}
 \zihao{5}{
