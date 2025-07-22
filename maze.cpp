@@ -73,10 +73,10 @@ namespace maze{
         initalMaze(maze, n); //生成并初始化，并设置出入口
         Pass p;
         const int reflection = (n + 1) / 2;
-        getPassage(p, 0, 0, reflection - 2, reflection - 2); //递归生成迷宫
+        getPath(p, 0, 0, reflection - 2, reflection - 2); //递归生成迷宫
         destroyWall(p, maze); //修改初始迷宫
         generateBoss(maze, n); //生成Boss
-        generateLoker(maze, n); //生成机关
+        generateLocker(maze, n); //生成机关
         generateTrap(maze, n); //生成陷阱
         generateSource(maze, n); //资源生成
         std::ofstream ofs("../last_maze.json");
@@ -86,7 +86,7 @@ namespace maze{
         return maze;
     }
 
-    void getPassage(Pass &result, const int x1, const int y1, const int x2, const int y2) {
+    void getPath(Pass &result, const int x1, const int y1, const int x2, const int y2) {
         //最小子问题
         if(x1 == x2){
             for(int i = y1; i < y2; i++){
@@ -125,10 +125,10 @@ namespace maze{
             randomDoor = getRand(x1, di);
             result.emplace_back(xyPair(randomDoor, dj), xyPair(randomDoor, dj + 1));
         }
-        getPassage(result, x1, y1, di, dj);
-        getPassage(result, di + 1, y1, x2, dj);
-        getPassage(result, di + 1, dj + 1, x2, y2);
-        getPassage(result, x1, dj + 1, di, y2);
+        getPath(result, x1, y1, di, dj);
+        getPath(result, di + 1, y1, x2, dj);
+        getPath(result, di + 1, dj + 1, x2, y2);
+        getPath(result, x1, dj + 1, di, y2);
     }
 
     void destroyWall(Pass const &result, Maze &maze) {
@@ -218,7 +218,7 @@ namespace maze{
         }
     }
 
-    void generateLoker(Maze &maze, int n) {
+    void generateLocker(Maze &maze, int n) {
         int LokerMostNum = 1;
                 // LokerNumPos = LokerMostNum,
                 // LokerValueUpper = 0,

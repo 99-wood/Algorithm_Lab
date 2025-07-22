@@ -101,7 +101,7 @@ namespace maze {
 
     int getRand(int min, int max);
 
-    void getPassage(Pass &result, int x1, int y1, int x2, int y2);
+    void getPath(Pass &result, int x1, int y1, int x2, int y2);
 
     void destroyWall(Pass const &result, Maze &maze);
 
@@ -109,7 +109,7 @@ namespace maze {
 
     void generateTrap(Maze &maze, int n);
 
-    void generateLoker(Maze &maze, int n);
+    void generateLocker(Maze &maze, int n);
 
     void generateBoss(Maze &maze, int n);
 
